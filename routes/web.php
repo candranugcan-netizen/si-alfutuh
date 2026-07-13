@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Master\TahunAjaranController;
 use App\Http\Controllers\Master\KelasController;
@@ -23,6 +24,13 @@ use App\Http\Controllers\AbsensiController;
 Route::get('/', [FrontController::class, 'index'])->name('home');
 Route::post('/ppdb/daftar', [PpdbController::class, 'store'])->name('ppdb.store');
 Route::get('/kabar-sekolah', [FrontController::class, 'semuaBerita'])->name('berita.semua');
+
+Route::get('/migrasi-burung', function() {
+    // Parameter --force wajib ada karena di hosting APP_ENV=production
+    Artisan::call('migrate', ['--force' => true]);
+
+    return 'Migrasi database berhasil dieksekusi!';
+});
 
 // Rute untuk tamu (belum login)
 Route::middleware('guest')->group(function () {
