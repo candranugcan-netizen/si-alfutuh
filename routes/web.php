@@ -25,13 +25,25 @@ Route::get('/', [FrontController::class, 'index'])->name('home');
 Route::post('/ppdb/daftar', [PpdbController::class, 'store'])->name('ppdb.store');
 Route::get('/kabar-sekolah', [FrontController::class, 'semuaBerita'])->name('berita.semua');
 
-Route::get('/migrasi-burung', function() {
-    // Parameter --force wajib ada karena di hosting APP_ENV=production
-    Artisan::call('migrate', ['--force' => true]);
+Route::get('/migrate-database-rahasia', function() {
+    try {
+        // Tingkatkan batas waktu dan memori (untuk mengatasi timeout)
+        ini_set('max_execution_time', 300);
+        ini_set('memory_limit', '256M');
 
-    return 'Migrasi database berhasil dieksekusi!';
+        // Eksekusi migrasi
+        Artisan::call('migrate', ['--force' => true]);
+
+        // Ambil pesan keberhasilan dari Artisan
+        $output = Artisan::output();
+
+        return '<h1>Migrasi Berhasil!</h1><pre>' . $output . '</pre>';
+
+    } catch (\Exception $e) {
+        // Jika error, tampilkan detail masalahnya
+        return '<h1>Migrasi Gagal</h1><p>Pesan Error:</p><pre>' . $e->getMessage() . '</pre>';
+    }
 });
-
 // Rute untuk tamu (belum login)
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
