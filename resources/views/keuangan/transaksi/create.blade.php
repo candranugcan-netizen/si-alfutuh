@@ -35,6 +35,20 @@
                         </select>
                     </div>
 
+                    <div id="blok_sumber_dana" style="display: none;" class="card p-3 bg-light mb-3 border-left-warning">
+                        <h5 class="text-warning font-weight-bold"><i class="fas fa-wallet"></i> Alokasi Sumber Dana</h5>
+                        <div class="form-group mb-0">
+                            <label>Dipotong dari Pos Kas / Pemasukan</label>
+                            <select name="sumber_dana_id" id="sumber_dana_id" class="form-control">
+                                <option value="">-- Kas Umum / Saldo Bebas (Bukan Dana Terikat) --</option>
+                                @foreach($kategoriPemasukan as $kp)
+                                    <option value="{{ $kp->id }}">{{ $kp->nama_kategori }}</option>
+                                @endforeach
+                            </select>
+                            <small class="text-muted mt-1 d-block">Pilih kategori pemasukan di atas jika pengeluaran ini memotong anggaran khusus (Misal: Uang SPP, Uang Seragam, dll).</small>
+                        </div>
+                    </div>
+
                     <div id="blok_siswa" style="display: none;" class="card p-3 bg-light mb-3">
                         <h5 class="text-success font-weight-bold">Informasi Pembayaran Siswa</h5>
                         <div class="form-group">
@@ -57,9 +71,17 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label>Nominal (Rupiah) <span class="text-danger">*</span></label>
                         <input type="number" class="form-control" name="nominal" id="nominal_uang" placeholder="Masukkan angka tanpa titik, contoh: 95000" required>
+                    </div> --}}
+
+                    <div class="form-group">
+                        <label>Nominal (Rupiah) <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control @error('nominal') is-invalid @enderror" name="nominal" id="nominal_uang" placeholder="Masukkan angka tanpa titik, contoh: 95000" value="{{ old('nominal') }}" required>
+                        @error('nominal')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="form-group">
@@ -81,6 +103,7 @@
         let jenis = this.value;
         let categories = document.querySelectorAll('#kategori_id option');
         let blokSiswa = document.getElementById('blok_siswa');
+        let blokSumberDana = document.getElementById('blok_sumber_dana');
 
         // Filter kategori berdasarkan jenis yang dipilih
         categories.forEach(opt => {
@@ -94,12 +117,18 @@
         });
         document.getElementById('kategori_id').value = "";
 
-        // Tampilkan blok siswa jika jenisnya Pemasukan
+        // Tampilkan/Sembunyikan blok input secara dinamis
         if(jenis === 'Pemasukan') {
             blokSiswa.style.display = 'block';
+            blokSumberDana.style.display = 'none';
+            document.getElementById('sumber_dana_id').value = "";
+        } else if(jenis === 'Pengeluaran') {
+            blokSiswa.style.display = 'none';
+            blokSumberDana.style.display = 'block';
+            document.getElementById('siswa_id').value = "";
         } else {
             blokSiswa.style.display = 'none';
-            document.getElementById('siswa_id').value = "";
+            blokSumberDana.style.display = 'none';
         }
     });
 

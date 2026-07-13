@@ -22,7 +22,8 @@ class TransaksiExport implements FromQuery, WithHeadings, WithMapping, WithStyle
 
     public function query()
     {
-        $query = Transaksi::with(['kategori', 'siswa.kelas']);
+        // REVISI: Tambahkan sumberDana pada pemuatan relasi (Eager Loading)
+        $query = Transaksi::with(['kategori', 'siswa.kelas', 'sumberDana']);
 
         // Samakan persis dengan filter di Index Controller
         if ($this->request->filled('start_date') && $this->request->filled('end_date')) {
@@ -34,6 +35,19 @@ class TransaksiExport implements FromQuery, WithHeadings, WithMapping, WithStyle
         if ($this->request->filled('kategori_transaksi_id')) {
             $query->where('kategori_transaksi_id', $this->request->kategori_transaksi_id);
         }
+
+        // FITUR BARU: Filter Export Berdasarkan Pos Kantong Dana
+        if ($this->request->filled('pos_dana')) {
+            $posDana = $this->request->pos_dana;
+            $query->where(function($q) use ($posDana) {
+                $q->where(function($p) use ($posDana) {
+                    $p->where('jenis', 'Pemasukan')->where('kategori_transaksi_id', $posDana);
+                })->orWhere(function($p) use ($posDana) {
+                    $p->where('jenis', 'Pengeluaran')->where('sumber_dana_id', $posDana);
+                });
+            });
+        }
+
         if ($this->request->filled('keyword')) {
             $keyword = $this->request->keyword;
             $query->where(function($q) use ($keyword) {
@@ -57,12 +71,23 @@ class TransaksiExport implements FromQuery, WithHeadings, WithMapping, WithStyle
             'Jenis',
             'Siswa / Keterangan',
             'Bulan Pembayaran (SPP)',
+            'Sumber Dana / Potongan Pos', // REVISI LABEL KOLOM
             'Nominal (Rp)',
         ];
     }
 
     public function map($transaksi): array
     {
+        // REVISI: Deteksi nama pos sumber dana
+        $sumberDana = '-';
+        if ($transaksi->jenis == 'Pengeluaran') {
+            if ($transaksi->sumberDana) {
+                $sumberDana = 'Memotong: ' . $transaksi->sumberDana->nama_kategori;
+            } else {
+                $sumberDana = 'Memotong: Kas Umum / Bebas';
+            }
+        }
+
         return [
             date('d-m-Y', strtotime($transaksi->tanggal)),
             $transaksi->no_transaksi,
@@ -70,15 +95,15 @@ class TransaksiExport implements FromQuery, WithHeadings, WithMapping, WithStyle
             $transaksi->jenis,
             $transaksi->siswa ? $transaksi->siswa->nama_siswa . ' (Kelas ' . $transaksi->siswa->kelas->nama_kelas . ')' : $transaksi->keterangan,
             $transaksi->untuk_bulan ?? '-',
-            $transaksi->nominal, // Biarkan angka mentah, nanti di-styling via Excel
+            $sumberDana, // Cetak info sumber dana di sini
+            $transaksi->nominal, // Biarkan angka mentah agar bisa di-sum di excel
         ];
     }
 
     public function styles(Worksheet $sheet)
     {
         return [
-            // Menebalkan baris pertama (Heading)
-            1 => ['font' => ['bold' => true]],
+            1    => ['font' => ['bold' => true]],
         ];
     }
 }

@@ -143,7 +143,7 @@
 
         <div class="d-flex justify-content-between align-items-center mt-3">
             <small class="text-muted">
-                Menampilkan {{ $siswas->firstItem() ?? 0 }} sampai {{ $siswas->lastItem() ?? 0 }} dari {{ $siswas->total() }} data transaksi.
+                Menampilkan {{ $siswas->firstItem() ?? 0 }} sampai {{ $siswas->lastItem() ?? 0 }} dari {{ $siswas->total() }} data siswa.
             </small>
             <div>
                 {{ $siswas->links() }}
