@@ -80,7 +80,7 @@
                                 <select name="tahun_ajaran_id" class="form-control" required>
                                     <option value="">-- Pilih Tahun Ajaran --</option>
                                     @foreach($tahunAjaranList as $ta)
-                                        <option value="{{ $ta->id }}">{{ $ta->nama }}</option>
+                                        <option value="{{ $ta->id }}">{{ $ta->nama }} {{ $ta->semester }}</option>
                                     @endforeach
                                 </select>
                             </div>

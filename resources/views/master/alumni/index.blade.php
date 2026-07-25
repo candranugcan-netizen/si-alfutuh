@@ -65,7 +65,7 @@
                                         <small class="d-block mb-1">
                                             <i class="fas fa-chevron-right text-success mr-1"></i>
                                             <strong>{{ $riwayat->kelas->nama_kelas ?? '-' }}</strong>
-                                            ({{ $riwayat->tahunAjaran->nama_tahun_ajaran ?? '-' }})
+                                            ({{ $riwayat->tahunAjaran->nama ?? '-' }})
                                             <span class="badge badge-light border">{{ $riwayat->keterangan }}</span>
                                         </small>
                                     @endforeach
