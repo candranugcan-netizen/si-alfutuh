@@ -45,6 +45,7 @@
                             <th>Jenis Kelamin</th>
                             <th>Kelas Terakhir</th>
                             <th>Riwayat Perjalanan Kelas</th>
+                            <th>Dokumen</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -70,10 +71,32 @@
                                         </small>
                                     @endforeach
                                 </td>
+
+                                <td>
+                                    @if($alumni->foto_anak)
+                                        <a href="{{ asset('storage/dokumen_siswa/' . $alumni->foto_anak) }}" target="_blank" class="btn btn-sm btn-info mb-1">
+                                            <i class="fas fa-image"></i> Lihat Foto
+                                        </a>
+                                    @else
+                                        <span class="text-muted small d-block mb-1">Tidak ada dokumen</span>
+                                    @endif
+
+                                    @if($alumni->akta_kelahiran)
+                                        <a href="{{ asset('storage/dokumen_siswa/' . $alumni->akta_kelahiran) }}" target="_blank" class="btn btn-sm btn-secondary mb-1">
+                                            <i class="fas fa-file-alt"></i> Akta
+                                        </a>
+                                    @endif
+
+                                    @if($alumni->kartu_keluarga)
+                                        <a href="{{ asset('storage/dokumen_siswa/' . $alumni->kartu_keluarga) }}" target="_blank" class="btn btn-sm btn-secondary mb-1">
+                                            <i class="fas fa-file-invoice"></i> KK
+                                        </a>
+                                    @endif
+                                </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center py-4 text-muted">
+                                <td colspan="7" class="text-center py-4 text-muted">
                                     <i class="fas fa-user-slash fa-2x mb-2 d-block"></i>
                                     Belum ada data alumni yang terekam pada sistem atau filter yang dipilih.
                                 </td>
