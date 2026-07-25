@@ -98,6 +98,13 @@
         </div>
     </li>
 
+    <li class="nav-item {{ request()->routeIs('absensi_guru.*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('absensi_guru.index') }}">
+            <i class="fas fa-fw fa-user-plus"></i>
+            <span>Absensi Guru</span>
+        </a>
+    </li>
+
     <li class="nav-item {{ request()->routeIs('ppdb.*') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('ppdb.index') }}">
             <i class="fas fa-fw fa-user-plus"></i>

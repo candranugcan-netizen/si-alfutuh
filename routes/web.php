@@ -19,6 +19,7 @@ use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\PpdbController;
 use App\Http\Controllers\MateriParentingController;
 use App\Http\Controllers\AbsensiController;
+use App\Http\Controllers\AbsensiGuruController;
 
 // Jalur tamu
 Route::get('/', [FrontController::class, 'index'])->name('home');
@@ -75,6 +76,13 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/parenting', [MateriParentingController::class, 'indexOrtu'])->name('ortu.parenting.index');
     Route::get('/parenting/{id}', [MateriParentingController::class, 'showOrtu'])->name('ortu.parenting.show');
+
+    Route::get('/absensi_guru', [AbsensiGuruController::class, 'index'])->name('absensi_guru.index');
+    Route::get('/absensi_guru/catat', [AbsensiGuruController::class, 'create'])->name('absensi_guru.create');
+    Route::post('/absensi_guru/catat', [AbsensiGuruController::class, 'store'])->name('absensi_guru.store');
+    Route::delete('/absensi_guru/{absensi}', [AbsensiGuruController::class, 'destroy'])->name('absensi_guru.destroy');
+    Route::get('/absensi-guru/export/excel', [AbsensiGuruController::class, 'exportExcel'])->name('absensi_guru.exportExcel');
+    Route::get('/absensi-guru/export/pdf', [AbsensiGuruController::class, 'exportPdf'])->name('absensi_guru.exportPdf');
 
 
     Route::prefix('keuangan')->name('keuangan.')->group(function () {
