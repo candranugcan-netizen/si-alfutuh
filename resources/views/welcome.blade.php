@@ -7,6 +7,7 @@
 
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="{{ asset('img/logo.png') }}">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com" />
@@ -68,7 +69,11 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav" style="background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);">
         <div class="container px-5">
-            <a class="navbar-brand fw-bold text-success fs-3" href="#page-top"><i class="bi-egg-bounce me-2 text-warning"></i>RA Al Futuh</a>
+            <a class="navbar-brand fw-bold text-success fs-3 d-flex align-items-center" href="#page-top">
+                {{-- Memanggil logo.png, atur width sesuai selera --}}
+                <img src="{{ asset('img/logo.png') }}" alt="Logo RA" width="40" height="40" class="me-2" style="border-radius: 5px; object-fit: cover;">
+                RA Al Futuh
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 Menu <i class="bi-list"></i>
             </button>
@@ -119,8 +124,7 @@
                 <div class="col-lg-6 text-center position-relative">
                     <div class="position-relative d-inline-block">
                         <!-- Frame Foto Lingkaran Playful -->
-                        <img class="img-fluid rounded-circle shadow-lg position-relative" style="max-width: 80%; border: 15px solid #ffffff; z-index: 2;" src="https://ui-avatars.com/api/?name=RA+Al+Futuh&background=1cc88a&color=fff&size=400&rounded=true" alt="Ilustrasi RA Al Futuh" />
-                        <svg class="position-absolute blob-decorator" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <img class="img-fluid rounded-circle shadow-lg position-relative bg-white" style="max-width: 80%; border: 15px solid #ffffff; z-index: 2; object-fit: contain; aspect-ratio: 1/1;" src="{{ asset('img/logo.png') }}" alt="Logo Utama RA Al Futuh" />
                             <circle cx="50" cy="50" r="46" fill="#f0fdf4" />
                         </svg>
                     </div>

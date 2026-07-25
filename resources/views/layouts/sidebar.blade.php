@@ -1,7 +1,7 @@
 <ul class="navbar-nav bg-gradient-success sidebar sidebar-dark accordion toggled" id="accordionSidebar">
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('dashboard') }}">
         <div class="sidebar-brand-icon">
-            <i class="fas fa-school"></i>
+            <img src="{{ asset('img/logo.png') }}" alt="Logo RA Al Futuh" style="width: 45px; height: auto; border-radius: 5px;">
         </div>
         <div class="sidebar-brand-text mx-3">RA Al Futuh</div>
     </a>
