@@ -197,7 +197,7 @@
                     <div class="col-lg-4 col-md-6 mb-5">
                         <div class="card card-custom h-100">
                             @if($berita->gambar)
-                                <img src="{{ asset('uploads/berita/' . $berita->gambar) }}" class="berita-img" alt="{{ $berita->judul }}">
+                                <img src="{{ asset('storage/berita/' . $berita->gambar) }}" class="berita-img" alt="{{ $berita->judul }}">
                             @else
                                 <img src="https://via.placeholder.com/600x400.png?text=Berita+Sekolah" class="berita-img" alt="Placeholder">
                             @endif
@@ -224,7 +224,7 @@
                                 </div>
                                 <div class="modal-body p-4">
                                     @if($berita->gambar)
-                                        <img src="{{ asset('uploads/berita/' . $berita->gambar) }}" class="w-100 mb-4 rounded-4 shadow-sm" style="max-height: 380px; object-fit: cover;" alt="{{ $berita->judul }}">
+                                        <img src="{{ asset('storage/berita/' . $berita->gambar) }}" class="w-100 mb-4 rounded-4 shadow-sm" style="max-height: 380px; object-fit: cover;" alt="{{ $berita->judul }}">
                                     @endif
                                     <div class="small text-muted mb-3 pb-2 border-bottom">
                                         <i class="bi-calendar-event me-2"></i>Diterbitkan pada: {{ \Carbon\Carbon::parse($berita->created_at)->format('d F Y') }}

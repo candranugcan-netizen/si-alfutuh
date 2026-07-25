@@ -35,7 +35,7 @@
                             <td>{{ $index + 1 }}</td>
                             <td>
                                 @if($item->gambar)
-                                    <img src="{{ asset('uploads/berita/'.$item->gambar) }}" width="80" class="rounded">
+                                    <img src="{{ asset('storage/berita/'.$item->gambar) }}" width="80" class="rounded">
                                 @else
                                     <span class="text-muted">Tidak ada</span>
                                 @endif

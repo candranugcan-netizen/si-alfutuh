@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\MateriParenting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class MateriParentingController extends Controller
 {
@@ -42,7 +43,8 @@ class MateriParentingController extends Controller
             $namaFile = time() . '_parenting_' . \Illuminate\Support\Str::slug($namaAsli) . '.pdf';
 
             // GUNAKAN FOLDER UPLOADS (Sama seperti PPDB yang sudah terbukti berhasil)
-            $pathTujuan = public_path('uploads/materi_parenting');
+            $pathTujuan = Storage::disk('public')->path('materi_parenting');
+
             if (!File::exists($pathTujuan)) {
                 File::makeDirectory($pathTujuan, 0755, true);
             }
@@ -69,7 +71,7 @@ class MateriParentingController extends Controller
 
         // Sesuaikan folder hapus ke uploads
         if ($materi->tipe == 'pdf' && $materi->file_pdf) {
-            $pathFile = public_path('uploads/materi_parenting/' . $materi->file_pdf);
+            $pathFile = Storage::disk('public')->path('materi_parenting/' . $materi->file_pdf);
             if (File::exists($pathFile)) {
                 File::delete($pathFile);
             }

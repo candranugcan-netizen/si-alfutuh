@@ -20,6 +20,10 @@ use App\Http\Controllers\PpdbController;
 use App\Http\Controllers\MateriParentingController;
 use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\AbsensiGuruController;
+use App\Http\Controllers\InventarisController;
+use App\Http\Controllers\KategoriBarangController;
+use App\Http\Controllers\RuanganController;
+
 
 // Jalur tamu
 Route::get('/', [FrontController::class, 'index'])->name('home');
@@ -83,6 +87,18 @@ Route::middleware('auth')->group(function () {
     Route::delete('/absensi_guru/{absensi}', [AbsensiGuruController::class, 'destroy'])->name('absensi_guru.destroy');
     Route::get('/absensi-guru/export/excel', [AbsensiGuruController::class, 'exportExcel'])->name('absensi_guru.exportExcel');
     Route::get('/absensi-guru/export/pdf', [AbsensiGuruController::class, 'exportPdf'])->name('absensi_guru.exportPdf');
+
+
+    Route::prefix('inventaris')->name('inventaris.')->group(function () {
+
+    Route::get('/export-excel', [InventarisController::class, 'exportExcel'])->name('exportExcel');
+    Route::get('/export-pdf', [InventarisController::class, 'exportPdf'])->name('exportPdf');
+
+    Route::get('/cetak-qr', [InventarisController::class, 'cetakQr'])->name('cetakQr');
+    Route::resource('pencatatan', InventarisController::class)->except(['show', 'edit', 'update']);
+    Route::resource('kategori_barang', KategoriBarangController::class)->only(['index', 'store', 'destroy']);
+    Route::resource('ruangan', RuanganController::class)->only(['index', 'store', 'destroy']);
+    });
 
 
     Route::prefix('keuangan')->name('keuangan.')->group(function () {

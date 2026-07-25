@@ -84,14 +84,14 @@
                             <p>Menyiapkan Buku Digital...</p>
                         </div>
 
-                        <div class="_df_book" source="{{ asset('uploads/materi_parenting/' . $materi->file_pdf) }}" id="buku_digital"></div>
+                        <div class="_df_book" source="{{ asset('storage/materi_parenting/' . $materi->file_pdf) }}" id="buku_digital"></div>
 
                     </div>
                     <div class="card-footer bg-white border-0 p-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
                         <small class="text-muted">
                             <i class="bi-hand-index-thumb me-2 text-success"></i>Gunakan klik atau geser ujung halaman
                         </small>
-                        <a href="{{ asset('uploads/materi_parenting/' . $materi->file_pdf) }}" target="_blank" class="btn btn-sm btn-outline-success rounded-pill px-3">
+                        <a href="{{ asset('storage/materi_parenting/' . $materi->file_pdf) }}" target="_blank" class="btn btn-sm btn-outline-success rounded-pill px-3">
                             <i class="bi-download me-2"></i>Unduh / Buka PDF
                         </a>
                     </div>

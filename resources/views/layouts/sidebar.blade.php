@@ -43,7 +43,7 @@
             <i class="fas fa-fw fa-folder"></i>
             <span>Data Master</span>
         </a>
-        <div id="collapseMaster" class="collapse {{ request()->routeIs('tahun-ajaran.*', 'kelas.*', 'guru.*', 'siswa.*', 'alumni.*') ? 'show' : '' }}" data-parent="#accordionSidebar">
+        <div id="collapseMaster" class="collapse {{ request()->routeIs('tahun-ajaran.*', 'kelas.*', 'guru.*', 'siswa.*', 'alumni.*', 'inventaris.*') ? 'show' : '' }}" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item {{ request()->routeIs('tahun-ajaran.*') ? 'active font-weight-bold text-success' : '' }}" href="{{ route('tahun-ajaran.index') }}">Tahun Ajaran</a>
                 <a class="collapse-item {{ request()->routeIs('kelas.*') ? 'active font-weight-bold text-success' : '' }}" href="{{ route('kelas.index') }}">Data Kelas</a>
@@ -79,6 +79,21 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item {{ request()->routeIs('kategori.*') ? 'active font-weight-bold text-success' : '' }}" href="{{ route('keuangan.kategori.index') }}">Kategori Transaksi</a>
                 <a class="collapse-item {{ request()->routeIs('transaksi.*') ? 'active font-weight-bold text-success' : '' }}" href="{{ route('keuangan.transaksi.index') }}">Buku Kas</a>
+            </div>
+        </div>
+    </li>
+
+    <li class="nav-item {{ request()->routeIs('kategori_barang.*', 'ruangan.*', 'pencatatan.*') ? 'active' : '' }}">
+        <a class="nav-link {{ request()->routeIs('kategori_barang.*', 'ruangan.*', 'pencatatan.*') ? '' : 'collapsed' }}"
+           href="#" data-toggle="collapse" data-target="#collapseInventaris" aria-expanded="true" aria-controls="collapseInventaris">
+            <i class="fas fa-fw fa-wallet"></i>
+            <span>Inventaris</span>
+        </a>
+        <div id="collapseInventaris" class="collapse {{ request()->routeIs('kategori_barang.*', 'ruangan.*', 'pencatatan.*') ? 'show' : '' }}" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item {{ request()->routeIs('kategori_barang.*') ? 'active font-weight-bold text-success' : '' }}" href="{{ route('inventaris.kategori_barang.index') }}">Kategori Barang</a>
+                <a class="collapse-item {{ request()->routeIs('ruangan.*') ? 'active font-weight-bold text-success' : '' }}" href="{{ route('inventaris.ruangan.index') }}">Ruangan</a>
+                <a class="collapse-item {{ request()->routeIs('pencatatan.*') ? 'active font-weight-bold text-success' : '' }}" href="{{ route('inventaris.pencatatan.index') }}">Pendataan</a>
             </div>
         </div>
     </li>

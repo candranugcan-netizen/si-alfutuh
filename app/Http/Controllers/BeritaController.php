@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
+
 class BeritaController extends Controller
 {
     public function index()
@@ -36,7 +37,13 @@ class BeritaController extends Controller
         $namaGambar = time() . '_' . $gambar->getClientOriginalName();
 
         // GANTI NAMA FOLDER MENJADI 'uploads/berita'
-        $gambar->move(public_path('uploads/berita'), $namaGambar);
+        $pathTujuan = Storage::disk('public')->path('berita');
+
+            if (!file_exists($pathTujuan)) {
+                mkdir($pathTujuan, 0755, true);
+            }
+
+            $gambar->move($pathTujuan, $namaGambar);
     }
 
         Berita::create([
@@ -56,8 +63,10 @@ class BeritaController extends Controller
         $berita = Berita::findOrFail($id);
 
         // GANTI PATH MENJADI 'uploads/berita'
-        if ($berita->gambar && file_exists(public_path('uploads/berita/' . $berita->gambar))) {
-            unlink(public_path('uploads/berita/' . $berita->gambar));
+        $pathGambar = Storage::disk('public')->path('berita/' . $berita->gambar);
+
+        if ($berita->gambar && file_exists($pathGambar)) {
+            unlink($pathGambar);
         }
 
         $berita->delete();

@@ -10,6 +10,7 @@ use App\Models\Kelas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Support\Str;
 
@@ -41,7 +42,8 @@ class PpdbController extends Controller
             $ekstensiFinal = in_array($ekstensi, ['jpg', 'jpeg', 'png']) ? 'jpg' : $ekstensi;
             $namaFile = time() . '_' . $prefix . '_' . Str::slug($namaAsli) . '.' . $ekstensiFinal;
 
-            $pathTujuan = public_path('uploads/ppdb');
+            $pathTujuan = Storage::disk('public')->path('uploads/ppdb');
+
             if (!File::exists($pathTujuan)) {
                 File::makeDirectory($pathTujuan, 0755, true);
             }
@@ -110,7 +112,7 @@ class PpdbController extends Controller
             $user = User::create([
                 'name' => $pendaftaran->nama_ayah, // Ambil nama Ayah sebagai representasi
                 'email' => $pendaftaran->email_ortu,
-                'password' => Hash::make('raalfutuh' . date('Y')), // Password default: raalfutuh2026
+                'password' => Hash::make('ortu' . date('Y')), // Password default: ortu2026
             ]);
 
             // Assign Role jika Spatie terpasang
@@ -130,7 +132,8 @@ class PpdbController extends Controller
 
         // C. PINDAHKAN FILE KE FOLDER RESMI DOKUMEN SISWA
         $berkas = ['file_foto', 'file_akta', 'file_kk'];
-        $folderTujuan = public_path('storage/dokumen_siswa');
+        // Ambil jalur tujuan ke dalam folder storage
+        $folderTujuan = Storage::disk('public')->path('dokumen_siswa');
 
         if (!File::exists($folderTujuan)) {
             File::makeDirectory($folderTujuan, 0755, true);
@@ -138,7 +141,9 @@ class PpdbController extends Controller
 
         foreach ($berkas as $item) {
             $namaFile = $pendaftaran->$item;
-            $pathLama = public_path('uploads/ppdb/' . $namaFile);
+
+            // Sesuaikan jalur lama dan baru
+            $pathLama = Storage::disk('public')->path('uploads/ppdb/' . $namaFile);
             $pathBaru = $folderTujuan . '/' . $namaFile;
 
             if (File::exists($pathLama)) {

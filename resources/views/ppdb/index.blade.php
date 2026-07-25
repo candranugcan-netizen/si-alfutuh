@@ -50,9 +50,9 @@
                             </td>
                             <td class="text-center">
                                 <!-- Tombol Lihat Dokumen -->
-                                <a href="{{ asset('uploads/ppdb/' . $item->file_kk) }}" target="_blank" class="btn btn-sm btn-outline-primary mb-1" title="Lihat KK">KK</a>
-                                <a href="{{ asset('uploads/ppdb/' . $item->file_akta) }}" target="_blank" class="btn btn-sm btn-outline-info mb-1" title="Lihat Akta">Akta</a>
-                                <a href="{{ asset('uploads/ppdb/' . $item->file_foto) }}" target="_blank" class="btn btn-sm btn-outline-success mb-1" title="Lihat Foto">Foto</a>
+                                <a href="{{ asset('storage/uploads/ppdb/' . $item->file_kk) }}" target="_blank" class="btn btn-sm btn-outline-primary mb-1" title="Lihat KK">KK</a>
+                                <a href="{{ asset('storage/uploads/ppdb/' . $item->file_akta) }}" target="_blank" class="btn btn-sm btn-outline-info mb-1" title="Lihat Akta">Akta</a>
+                                <a href="{{ asset('storage/uploads/ppdb/' . $item->file_foto) }}" target="_blank" class="btn btn-sm btn-outline-success mb-1" title="Lihat Foto">Foto</a>
                             </td>
                             <td class="text-center">
                                 @if($item->status == 'Pending')
