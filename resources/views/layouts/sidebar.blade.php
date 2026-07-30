@@ -38,12 +38,13 @@
     </div>
 
     <li class="nav-item {{ request()->routeIs('tahun-ajaran.*', 'kelas.*', 'guru.*', 'siswa.*', 'alumni.*') ? 'active' : '' }}">
-        <a class="nav-link {{ request()->routeIs('tahun-ajaran.*', 'kelas.*', 'guru.*', 'siswa.*', 'alumni.*') ? '' : 'collapsed' }}"
-           href="#" data-toggle="collapse" data-target="#collapseMaster" aria-expanded="true" aria-controls="collapseMaster">
+        <!-- Hapus pengecekan kondisi dan jadikan selalu 'collapsed', serta aria-expanded="false" -->
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMaster" aria-expanded="false" aria-controls="collapseMaster">
             <i class="fas fa-fw fa-folder"></i>
             <span>Data Master</span>
         </a>
-        <div id="collapseMaster" class="collapse {{ request()->routeIs('tahun-ajaran.*', 'kelas.*', 'guru.*', 'siswa.*', 'alumni.*', 'inventaris.*') ? 'show' : '' }}" data-parent="#accordionSidebar">
+        <!-- Hapus pengecekan kondisi ? 'show' : '' -->
+        <div id="collapseMaster" class="collapse" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item {{ request()->routeIs('tahun-ajaran.*') ? 'active font-weight-bold text-success' : '' }}" href="{{ route('tahun-ajaran.index') }}">Tahun Ajaran</a>
                 <a class="collapse-item {{ request()->routeIs('kelas.*') ? 'active font-weight-bold text-success' : '' }}" href="{{ route('kelas.index') }}">Data Kelas</a>
