@@ -23,6 +23,7 @@ use App\Http\Controllers\AbsensiGuruController;
 use App\Http\Controllers\InventarisController;
 use App\Http\Controllers\KategoriBarangController;
 use App\Http\Controllers\RuanganController;
+use App\Http\Controllers\PeminjamanBarangController;
 
 
 // Jalur tamu
@@ -91,13 +92,21 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('inventaris')->name('inventaris.')->group(function () {
 
+    Route::get('/cetak-qr', [InventarisController::class, 'cetakQr'])->name('cetakQr');
     Route::get('/export-excel', [InventarisController::class, 'exportExcel'])->name('exportExcel');
     Route::get('/export-pdf', [InventarisController::class, 'exportPdf'])->name('exportPdf');
 
-    Route::get('/cetak-qr', [InventarisController::class, 'cetakQr'])->name('cetakQr');
-    Route::resource('pencatatan', InventarisController::class)->except(['show', 'edit', 'update']);
+    // Rute Resource otomatis untuk: index, create, store, show, edit, update, dan destroy
+    Route::resource('pencatatan', InventarisController::class);
     Route::resource('kategori_barang', KategoriBarangController::class)->only(['index', 'store', 'destroy']);
     Route::resource('ruangan', RuanganController::class)->only(['index', 'store', 'destroy']);
+
+    Route::post('peminjaman/{id}/kembalikan', [PeminjamanBarangController::class, 'kembalikan'])->name('peminjaman.kembalikan');
+    Route::resource('peminjaman', PeminjamanBarangController::class)->except(['edit', 'update', 'show']);
+    Route::get('peminjaman/export-pdf', [PeminjamanBarangController::class, 'exportPdf'])->name('peminjaman.exportPdf');
+    Route::get('peminjaman/{id}/cetak-surat', [PeminjamanBarangController::class, 'cetakSurat'])->name('peminjaman.cetakSurat');
+    Route::post('peminjaman/{id}/kembalikan', [PeminjamanBarangController::class, 'kembalikan'])->name('peminjaman.kembalikan');
+    Route::resource('peminjaman', PeminjamanBarangController::class)->except(['edit', 'update', 'show']);
     });
 
 

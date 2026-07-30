@@ -19,4 +19,8 @@ class Inventaris extends Model {
     public function riwayatPeminjaman() {
         return $this->hasMany(PeminjamanBarang::class, 'inventaris_id');
     }
+
+    public function riwayatPerubahan() {
+        return $this->hasMany(RiwayatInventaris::class, 'inventaris_id')->latest();
+    }
 }

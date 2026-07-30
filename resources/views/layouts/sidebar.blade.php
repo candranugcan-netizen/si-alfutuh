@@ -95,6 +95,7 @@
                 <a class="collapse-item {{ request()->routeIs('kategori_barang.*') ? 'active font-weight-bold text-success' : '' }}" href="{{ route('inventaris.kategori_barang.index') }}">Kategori Barang</a>
                 <a class="collapse-item {{ request()->routeIs('ruangan.*') ? 'active font-weight-bold text-success' : '' }}" href="{{ route('inventaris.ruangan.index') }}">Ruangan</a>
                 <a class="collapse-item {{ request()->routeIs('pencatatan.*') ? 'active font-weight-bold text-success' : '' }}" href="{{ route('inventaris.pencatatan.index') }}">Pendataan</a>
+                <a class="collapse-item {{ request()->routeIs('peminjaman.*') ? 'active font-weight-bold text-success' : '' }}" href="{{ route('inventaris.peminjaman.index') }}">Peminjaman</a>
             </div>
         </div>
     </li>
