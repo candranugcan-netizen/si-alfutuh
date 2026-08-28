@@ -23,6 +23,15 @@
     </li>
     @endhasanyrole
 
+    @hasanyrole('Komite')
+    <li class="nav-item {{ request()->routeIs('keuangan-komite.*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('keuangan-komite.index') }}">
+            <i class="fas fa-fw fa-money-bill"></i>
+            <span>Keuangan Komite</span>
+        </a>
+    </li>
+    @endhasanyrole
+
 
     @hasanyrole('Super Admin|Kepala Sekolah|Guru')
     <li class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
@@ -126,6 +135,13 @@
         <a class="nav-link" href="{{ route('ppdb.index') }}">
             <i class="fas fa-fw fa-user-plus"></i>
             <span>PPDB</span>
+        </a>
+    </li>
+
+    <li class="nav-item {{ request()->routeIs('keuangan-komite.*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('keuangan-komite.index') }}">
+            <i class="fas fa-fw fa-money-bill"></i>
+            <span>Keuangan Komite</span>
         </a>
     </li>
 

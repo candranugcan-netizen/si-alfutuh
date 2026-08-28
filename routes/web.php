@@ -24,6 +24,7 @@ use App\Http\Controllers\InventarisController;
 use App\Http\Controllers\KategoriBarangController;
 use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\PeminjamanBarangController;
+use App\Http\Controllers\KeuanganKomiteController;
 
 
 // Jalur tamu
@@ -155,4 +156,10 @@ Route::middleware('auth')->group(function () {
     Route::prefix('wali')->name('wali.')->middleware(['auth'])->group(function () {
         Route::get('/index', [DashboardController::class, 'index'])->name('dashboard');
     });
+});
+
+Route::middleware(['auth', 'role:Komite|Super Admin'])->group(function () {
+    Route::resource('keuangan-komite', KeuanganKomiteController::class)->only([
+        'index', 'store', 'destroy'
+    ]);
 });

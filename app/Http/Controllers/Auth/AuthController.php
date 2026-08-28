@@ -31,12 +31,18 @@ class AuthController extends Controller
 
             $user = Auth::user();
 
-        // --- TAMBAHKAN LOGIKA INI ---
-        // Penulisan 'Orang Tua' harus sama persis dengan yang ada di database tabel roles
-        if ($user->hasRole('Orang Tua')) {
-            return redirect()->route('wali.dashboard'); // Arahkan ke dashboard Wali Murid
-        }
-            return redirect()->intended('dashboard');
+            // 1. Pengalihan untuk Wali Murid / Orang Tua
+            if ($user->hasRole('Orang Tua')) {
+                return redirect()->route('wali.dashboard');
+            }
+
+            // 2. Pengalihan untuk Komite (langsung ke kas komite)
+            if ($user->hasRole('Komite')) {
+                return redirect()->route('keuangan-komite.index');
+            }
+
+            // 3. Pengalihan default untuk Super Admin, Guru, & Role lainnya
+            return redirect()->intended('/dashboard');
         }
 
         return back()->withErrors([
