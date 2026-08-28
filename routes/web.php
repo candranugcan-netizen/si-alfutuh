@@ -32,6 +32,24 @@ Route::get('/', [FrontController::class, 'index'])->name('home');
 Route::post('/ppdb/daftar', [PpdbController::class, 'store'])->name('ppdb.store');
 Route::get('/kabar-sekolah', [FrontController::class, 'semuaBerita'])->name('berita.semua');
 
+
+Route::get('/rahasia-seed-role', function () {
+    if (request('key') !== 'alfutuh123') { // Proteksi parameter rahasia
+        abort(403, 'Akses ditolak.');
+    }
+
+    try {
+        Artisan::call('db:seed', [
+            '--class' => 'RolePermissionSeeder',
+            '--force' => true,
+        ]);
+
+        return 'RolePermissionSeeder berhasil dijalankan!';
+    } catch (\Exception $e) {
+        return 'Gagal menjalankan seeder: ' . $e->getMessage();
+    }
+});
+
 Route::get('/migrate-database-rahasia', function() {
     try {
         // Tingkatkan batas waktu dan memori (untuk mengatasi timeout)
