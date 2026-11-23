@@ -5,6 +5,7 @@
         return $item->sub_kategori ?? 'Umum';
     }]);
     $tahunAjaranList = $tahunAjaranList ?? \App\Models\TahunAjaran::orderBy('nama', 'desc')->get();
+    $guruList = $guruList ?? \App\Models\Guru::orderBy('nama_guru', 'asc')->get();
 @endphp
 
 @section('title', 'Input e-Rapor: ' . $erapor->siswa->nama_siswa)
@@ -271,7 +272,14 @@
                                         <div class="form-group row">
                                             <label class="col-sm-5 col-form-label">Guru / Wali Kelas</label>
                                             <div class="col-sm-7">
-                                                <input type="text" name="nama_guru_kelas" class="form-control" value="{{ old('nama_guru_kelas', $erapor->nama_guru_kelas ?? auth()->user()->name) }}" required>
+                                                <select name="nama_guru_kelas" id="selectGuruKelas" class="form-control" required>
+                                                    <option value="">— Pilih Guru —</option>
+                                                    @foreach($guruList as $guru)
+                                                        <option value="{{ $guru->nama_guru }}" data-nik="{{ $guru->nik ?? '-' }}" {{ old('nama_guru_kelas', $erapor->nama_guru_kelas) == $guru->nama_guru ? 'selected' : '' }}>
+                                                            {{ $guru->nama_guru }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -817,5 +825,22 @@
             }
         });
     }
+
+    // Auto-fill NIP Guru Kelas saat dropdown guru dipilih
+    $(document).ready(function() {
+        var selectGuru = document.getElementById('selectGuruKelas');
+        var inputNip = document.querySelector('input[name="nip_guru_kelas"]');
+
+        if (selectGuru && inputNip) {
+            selectGuru.addEventListener('change', function() {
+                var selected = this.options[this.selectedIndex];
+                if (selected && selected.value) {
+                    inputNip.value = selected.getAttribute('data-nik') || '-';
+                } else {
+                    inputNip.value = '';
+                }
+            });
+        }
+    });
 </script>
 @endsection

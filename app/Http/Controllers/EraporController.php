@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Erapor;
+use App\Models\Guru;
 use App\Models\Kelas;
 use App\Models\Siswa;
 use App\Models\TahunAjaran;
@@ -76,8 +77,9 @@ class EraporController extends Controller
         }]);
 
         $tahunAjaranList = TahunAjaran::orderBy('nama', 'desc')->get();
+        $guruList = Guru::orderBy('nama_guru', 'asc')->get();
 
-        return view('erapor.edit', compact('erapor', 'nilaiGrouped', 'tahunAjaranList'));
+        return view('erapor.edit', compact('erapor', 'nilaiGrouped', 'tahunAjaranList', 'guruList'));
     }
 
     /**
