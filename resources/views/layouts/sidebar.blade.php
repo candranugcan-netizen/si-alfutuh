@@ -64,6 +64,7 @@
         </div>
     </li>
 
+
     <li class="nav-item {{ request()->routeIs('akademik.*', 'absensi.*', 'kenaikan-kelas.*') ? 'active' : '' }}">
         <a class="nav-link {{ request()->routeIs('akademik.*', 'absensi.*', 'kenaikan-kelas.*') ? '' : 'collapsed' }}"
            href="#" data-toggle="collapse" data-target="#collapseAkademik" aria-expanded="true" aria-controls="collapseAkademik">
@@ -107,6 +108,14 @@
                 <a class="collapse-item {{ request()->routeIs('peminjaman.*') ? 'active font-weight-bold text-success' : '' }}" href="{{ route('inventaris.peminjaman.index') }}">Peminjaman</a>
             </div>
         </div>
+    </li>
+
+    
+    <li class="nav-item {{ request()->routeIs('erapor.*') ? 'active' : '' }}">
+        <a class="nav-link" href="{{ route('erapor.index') }}">
+            <i class="fas fa-fw fa-award"></i>
+            <span>E-Rapor</span>
+        </a>
     </li>
 
 

@@ -25,12 +25,22 @@ use App\Http\Controllers\KategoriBarangController;
 use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\PeminjamanBarangController;
 use App\Http\Controllers\KeuanganKomiteController;
+use App\Http\Controllers\EraporController;
 
 
 // Jalur tamu
 Route::get('/', [FrontController::class, 'index'])->name('home');
 Route::post('/ppdb/daftar', [PpdbController::class, 'store'])->name('ppdb.store');
 Route::get('/kabar-sekolah', [FrontController::class, 'semuaBerita'])->name('berita.semua');
+
+// Fallback akses storage public jika symlink OS belum aktif
+Route::get('/storage/{path}', function ($path) {
+    $filePath = storage_path('app/public/' . $path);
+    if (!file_exists($filePath)) {
+        abort(404);
+    }
+    return response()->file($filePath);
+})->where('path', '.*');
 
 
 Route::get('/rahasia-seed-role', function () {
@@ -167,8 +177,22 @@ Route::middleware('auth')->group(function () {
         Route::delete('/akademik/alquran/{id}', [AkademikController::class, 'destroyAlquran'])->name('akademik.destroy-alquran');
         Route::delete('/akademik/aisma/{id}', [AkademikController::class, 'destroyAisma'])->name('akademik.destroy-aisma');
         Route::delete('/akademik/kenangan/{id}', [AkademikController::class, 'destroyKenangan'])->name('akademik.destroy-kenangan');
+    });
 
+    // Rute e-Rapor & Laporan Perkembangan Siap Cetak
+    Route::prefix('erapor')->name('erapor.')->group(function () {
+        Route::get('/', [EraporController::class, 'index'])->name('index');
+        Route::get('/edit/{siswaId}', [EraporController::class, 'edit'])->name('edit');
+        Route::put('/update/{erapor}', [EraporController::class, 'update'])->name('update');
+        Route::delete('/{erapor}', [EraporController::class, 'destroy'])->name('destroy');
+        Route::get('/cetak-indikator/{erapor}', [EraporController::class, 'cetakIndikator'])->name('cetakIndikator');
+        Route::get('/cetak-perkembangan/{erapor}', [EraporController::class, 'cetakLaporanPerkembangan'])->name('cetakPerkembangan');
+        Route::get('/cetak-lengkap/{erapor}', [EraporController::class, 'cetakLengkap'])->name('cetakLengkap');
 
+        // Manajemen Indikator (Tambah, Hapus, dan Reset Default)
+        Route::post('/{erapor}/indikator', [EraporController::class, 'tambahIndikator'])->name('tambahIndikator');
+        Route::delete('/indikator/{nilaiId}', [EraporController::class, 'hapusIndikator'])->name('hapusIndikator');
+        Route::post('/{erapor}/reset-indikator', [EraporController::class, 'resetIndikator'])->name('resetIndikator');
     });
 
     Route::prefix('wali')->name('wali.')->middleware(['auth'])->group(function () {

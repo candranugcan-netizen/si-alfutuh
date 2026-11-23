@@ -110,7 +110,7 @@
                             <td>{{ $item->keterangan ?? '-' }}</td>
                             <td>
                                 @if($item->bukti_nota)
-                                    <a href="{{ asset('storage/' . $item->bukti_nota) }}" target="_blank" class="btn btn-sm btn-info">Lihat</a>
+                                    <a href="{{ asset('storage/bukti_komite/' . $item->bukti_nota) }}" target="_blank" class="btn btn-sm btn-info">Lihat</a>
                                 @else
                                     -
                                 @endif

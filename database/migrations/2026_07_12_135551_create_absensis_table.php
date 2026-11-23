@@ -10,19 +10,21 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-{
-    Schema::create('absensi', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('siswa_id')->constrained('siswa')->cascadeOnDelete();
-        $table->date('tanggal');
-        $table->enum('status', ['Hadir', 'Sakit', 'Izin', 'Alfa']);
-        $table->string('keterangan')->nullable();
-        $table->timestamps();
+    {
+        if (!Schema::hasTable('absensi')) {
+            Schema::create('absensi', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('siswa_id')->constrained('siswa')->cascadeOnDelete();
+                $table->date('tanggal');
+                $table->enum('status', ['Hadir', 'Sakit', 'Izin', 'Alfa']);
+                $table->string('keterangan')->nullable();
+                $table->timestamps();
 
-        // Mencegah duplikasi: 1 siswa hanya punya 1 data absensi di hari yang sama
-        $table->unique(['siswa_id', 'tanggal']);
-    });
-}
+                // Mencegah duplikasi: 1 siswa hanya punya 1 data absensi di hari yang sama
+                $table->unique(['siswa_id', 'tanggal']);
+            });
+        }
+    }
 
     /**
      * Reverse the migrations.

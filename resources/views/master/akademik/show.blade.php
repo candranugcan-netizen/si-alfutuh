@@ -7,6 +7,9 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Riwayat Perkembangan: {{ $siswa->nama_siswa }}</h1>
         <div>
+            <a href="{{ route('erapor.edit', $siswa->id) }}" class="btn btn-success btn-sm mr-2">
+                <i class="fas fa-award"></i> e-Rapor Siap Cetak
+            </a>
             <a href="{{ route('master.akademik.cetak', $siswa->id) }}" target="_blank" class="btn btn-primary btn-sm mr-2">
                 <i class="fas fa-print"></i> Cetak PDF
             </a>

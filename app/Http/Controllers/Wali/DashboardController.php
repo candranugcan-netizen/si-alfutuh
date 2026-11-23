@@ -34,7 +34,9 @@ class DashboardController extends Controller
             'perkembanganAisma' => function($q) {
                 $q->latest('tanggal')->take(5);
             },
-            // 'aktivitasKenangan.tahunAjaran', <--- HAPUS / KOMENTARI BARIS INI
+            'erapor' => function($q) {
+                $q->with('tahunAjaran')->latest();
+            },
             'transaksi.kategoriTransaksi',
 
             'absensi' => function($q) use ($bulan, $tahun) {

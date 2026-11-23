@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\KeuanganKomite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class KeuanganKomiteController extends Controller
 {
@@ -40,9 +42,20 @@ class KeuanganKomiteController extends Controller
             return back()->with('error', 'Profil Komite belum terhubung dengan akun ini.');
         }
 
-        $buktiPath = null;
+        $namaFile = null;
         if ($request->hasFile('bukti_nota')) {
-            $buktiPath = $request->file('bukti_nota')->store('bukti_komite', 'public');
+            $file = $request->file('bukti_nota');
+            $namaAsli = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $namaFile = time() . '_nota_' . Str::slug($namaAsli) . '.' . $file->getClientOriginalExtension();
+
+            // Simpan ke folder bukti_komite di dalam disk public (sama seperti Berita & PPDB)
+            $pathTujuan = Storage::disk('public')->path('bukti_komite');
+
+            if (!File::exists($pathTujuan)) {
+                File::makeDirectory($pathTujuan, 0755, true);
+            }
+
+            $file->move($pathTujuan, $namaFile);
         }
 
         $komite->keuangan()->create([
@@ -51,7 +64,7 @@ class KeuanganKomiteController extends Controller
             'kategori' => $request->kategori,
             'nominal' => $request->nominal,
             'keterangan' => $request->keterangan,
-            'bukti_nota' => $buktiPath,
+            'bukti_nota' => $namaFile,
         ]);
 
         return redirect()->route('keuangan-komite.index')->with('success', 'Catatan keuangan berhasil disimpan.');
@@ -60,7 +73,10 @@ class KeuanganKomiteController extends Controller
     public function destroy(KeuanganKomite $keuanganKomite)
     {
         if ($keuanganKomite->bukti_nota) {
-            Storage::disk('public')->delete($keuanganKomite->bukti_nota);
+            $pathFile = Storage::disk('public')->path('bukti_komite/' . $keuanganKomite->bukti_nota);
+            if (File::exists($pathFile)) {
+                File::delete($pathFile);
+            }
         }
 
         $keuanganKomite->delete();

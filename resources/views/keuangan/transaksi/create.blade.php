@@ -69,6 +69,15 @@
                                 @endforeach
                             </select>
                         </div>
+
+
+                    <div class="form-group">
+                            <label>Untuk Pembayaran Tahun</label>
+                            <select name="untuk_tahun" class="form-control">
+                                <option value="">-- Pilih Tahun (Khusus SPP) --</option>
+                                    <option value="{{ date('Y') }}">{{ date('Y') }}</option>
+                            </select>
+                        </div> 
                     </div>
 
                     {{-- <div class="form-group">

@@ -169,6 +169,60 @@
                                 </div>
                             </div>
 
+                            <div class="card shadow mb-4 border-left-success">
+                                <div class="card-header py-3 d-flex align-items-center justify-content-between bg-white">
+                                    <h6 class="m-0 font-weight-bold text-success"><i class="fas fa-file-invoice mr-2"></i>e-Rapor & Laporan Perkembangan Anak</h6>
+                                </div>
+                                <div class="card-body">
+                                    @if($siswa->erapor->isNotEmpty())
+                                        <div class="table-responsive">
+                                            <table class="table table-sm table-bordered mb-0">
+                                                <thead class="thead-light small">
+                                                    <tr>
+                                                        <th>Tahun Ajaran</th>
+                                                        <th>Semester</th>
+                                                        <th>Status</th>
+                                                        <th>Aksi Cetak / Unduh</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="small">
+                                                    @foreach($siswa->erapor as $r)
+                                                        <tr>
+                                                            <td class="font-weight-bold">{{ $r->tahunAjaran->nama ?? '-' }}</td>
+                                                            <td>Semester {{ $r->semester }}</td>
+                                                            <td>
+                                                                @if($r->status == 'Final')
+                                                                    <span class="badge badge-success"><i class="fas fa-check"></i> Siap Cetak</span>
+                                                                @else
+                                                                    <span class="badge badge-warning text-dark"><i class="fas fa-clock"></i> Draft</span>
+                                                                @endif
+                                                            </td>
+                                                            <td>
+                                                                <div class="btn-group btn-group-sm">
+                                                                    <a href="{{ route('erapor.cetakIndikator', $r->id) }}" target="_blank" class="btn btn-danger btn-sm" title="e-Rapor Indikator Format Lampiran">
+                                                                        <i class="fas fa-file-pdf"></i> e-Rapor Indikator
+                                                                    </a>
+                                                                    <a href="{{ route('erapor.cetakPerkembangan', $r->id) }}" target="_blank" class="btn btn-success btn-sm" title="Laporan Perkembangan & Foto Bukti">
+                                                                        <i class="fas fa-camera"></i> Foto Perkembangan
+                                                                    </a>
+                                                                    <a href="{{ route('erapor.cetakLengkap', $r->id) }}" target="_blank" class="btn btn-primary btn-sm" title="Bundel Lengkap">
+                                                                        <i class="fas fa-book"></i> Bundel Lengkap
+                                                                    </a>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    @else
+                                        <div class="text-muted small py-2">
+                                            <i class="fas fa-info-circle mr-1 text-info"></i> Belum ada rekaman e-Rapor yang diterbitkan untuk ananda.
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
                                     <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-camera-retro"></i> Galeri Aktivitas & Kenangan</h6>

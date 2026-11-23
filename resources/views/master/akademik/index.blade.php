@@ -43,9 +43,14 @@
         <div class="card shadow mb-4 border-left-info">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 class="m-0 font-weight-bold text-info">Daftar Siswa untuk Penilaian</h6>
-                <a href="{{ route('master.akademik.cetak-rekap', $kelasId) }}" target="_blank" class="btn btn-sm btn-primary shadow-sm">
-                    <i class="fas fa-print fa-sm text-white-50"></i> Cetak Rekap Kelas
-                </a>
+                <div>
+                    <a href="{{ route('erapor.index', ['kelas_id' => $kelasId]) }}" class="btn btn-sm btn-success shadow-sm mr-2">
+                        <i class="fas fa-award mr-1"></i> e-Rapor Siap Cetak
+                    </a>
+                    <a href="{{ route('master.akademik.cetak-rekap', $kelasId) }}" target="_blank" class="btn btn-sm btn-primary shadow-sm">
+                        <i class="fas fa-print fa-sm text-white-50"></i> Cetak Rekap Kelas
+                    </a>
+                </div>
             </div>
             <div class="card-body">
                 @if(count($siswaList) > 0)
@@ -74,7 +79,10 @@
                                                 <i class="fas fa-camera"></i> Foto Kenangan
                                             </button>
                                                 <a href="{{ route('master.akademik.show', $siswa->id) }}" class="btn btn-sm btn-info mb-1">
-                                                    <i class="fas fa-history"></i> Lihat Riwayat
+                                                    <i class="fas fa-history"></i> Riwayat
+                                                </a>
+                                                <a href="{{ route('erapor.edit', $siswa->id) }}" class="btn btn-sm btn-dark mb-1">
+                                                    <i class="fas fa-award"></i> e-Rapor
                                                 </a>
                                         </td>
                                     </tr>

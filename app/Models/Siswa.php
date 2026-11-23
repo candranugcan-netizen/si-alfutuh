@@ -12,10 +12,11 @@ class Siswa extends Model
 
     protected $table = 'siswa';
 
-    protected $fillable = ['kelas_id', 'orang_tua_id', 'nominal_spp', 'nis', 'nama_siswa', 'jenis_kelamin', 'tempat_lahir', 'tanggal_lahir','foto_anak',
-    'akta_kelahiran',
-    'kartu_keluarga','status_siswa',
-        'tahun_masuk',];
+    protected $fillable = [
+        'kelas_id', 'orang_tua_id', 'nominal_spp', 'nis', 'nama_siswa', 'jenis_kelamin', 'tempat_lahir', 'tanggal_lahir', 'foto_anak',
+        'akta_kelahiran', 'kartu_keluarga', 'status_siswa', 'tahun_masuk',
+        'agama', 'anak_ke', 'alamat', 'nama_ayah', 'nama_ibu', 'agama_ayah', 'agama_ibu'
+    ];
 
 public function orangTua(): BelongsTo
 {
@@ -59,6 +60,11 @@ public function orangTua(): BelongsTo
     public function aktivitasKenangan()
     {
         return $this->hasMany(AktivitasKenangan::class, 'siswa_id')->latest();
+    }
+
+    public function erapor()
+    {
+        return $this->hasMany(Erapor::class, 'siswa_id');
     }
 
     public function absensi()
