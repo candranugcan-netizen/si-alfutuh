@@ -42,6 +42,16 @@
     <script src="{{ asset('sbadmin/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
     <script src="{{ asset('sbadmin/js/sb-admin-2.min.js') }}"></script>
+    <script>
+        // Global handler saat sesi habis pada panggilan AJAX
+        if (typeof $ !== 'undefined') {
+            $(document).ajaxError(function(event, jqXHR, ajaxSettings, thrownError) {
+                if (jqXHR.status === 419 || jqXHR.status === 401) {
+                    window.location.href = "{{ route('login') }}?expired=1";
+                }
+            });
+        }
+    </script>
     @stack('scripts')
 </body>
 </html>

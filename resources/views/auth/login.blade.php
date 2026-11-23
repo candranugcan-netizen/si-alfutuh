@@ -89,6 +89,26 @@
                                 <p class="text-muted small mb-0">Silakan masukkan alamat email dan kata sandi akun Anda.</p>
                             </div>
 
+                            <!-- Alert Sesi Habis / Warning -->
+                            @if (session('warning') || request()->query('expired'))
+                                <div class="alert alert-warning border-0 d-flex align-items-center gap-2 py-3 px-3 rounded-3 mb-4" role="alert" style="background-color: #fefce8; border-left: 4px solid #d97706 !important; color: #854d0e;">
+                                    <i class="bi-clock-history fs-5 flex-shrink-0 text-warning"></i>
+                                    <div class="small fw-semibold">
+                                        {{ session('warning') ?? 'Sesi Anda telah berakhir karena tidak ada aktivitas. Silakan masuk kembali.' }}
+                                    </div>
+                                </div>
+                            @endif
+
+                            <!-- Alert Sukses / Status -->
+                            @if (session('status'))
+                                <div class="alert alert-success border-0 d-flex align-items-center gap-2 py-3 px-3 rounded-3 mb-4" role="alert" style="background-color: #ecfdf5; border-left: 4px solid #15803d !important; color: #166534;">
+                                    <i class="bi-check-circle-fill fs-5 flex-shrink-0 text-success"></i>
+                                    <div class="small fw-semibold">
+                                        {{ session('status') }}
+                                    </div>
+                                </div>
+                            @endif
+
                             <!-- Alert Error Validasi -->
                             @if ($errors->any())
                                 <div class="alert alert-danger border-0 d-flex align-items-center gap-2 py-3 px-3 rounded-3 mb-4" role="alert" style="background-color: #fef2f2; border-left: 4px solid #ef4444 !important; color: #991b1b;">
