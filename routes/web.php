@@ -101,6 +101,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('berita', BeritaController::class);
 
     Route::get('/ppdb', [PpdbController::class, 'index'])->name('ppdb.index');
+    Route::get('/ppdb/{id}', [PpdbController::class, 'show'])->name('ppdb.show');
     Route::post('/ppdb/terima/{id}', [PpdbController::class, 'terima'])->name('ppdb.terima');
     Route::post('/ppdb/tolak/{id}', [PpdbController::class, 'tolak'])->name('ppdb.tolak');
 

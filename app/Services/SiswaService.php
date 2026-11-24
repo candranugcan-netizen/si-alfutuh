@@ -49,6 +49,7 @@ class SiswaService
                 'tempat_lahir' => $data['tempat_lahir'],
                 'tanggal_lahir' => $data['tanggal_lahir'],
                 'nominal_spp' => $data['nominal_spp'],
+                'alamat' => $data['alamat'] ?? null,
             ]);
 
             // 4. Proses Loop Kompresi & Upload Dokumen Siswa
@@ -132,6 +133,7 @@ class SiswaService
                 'tempat_lahir' => $data['tempat_lahir'],
                 'tanggal_lahir' => $data['tanggal_lahir'],
                 'nominal_spp' => $data['nominal_spp'],
+                'alamat' => $data['alamat'] ?? null,
             ];
 
             // Gabungkan data teks dengan nama file dokumen baru (jika ada dokumen yang diunggah)

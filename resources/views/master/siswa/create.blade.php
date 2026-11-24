@@ -60,6 +60,11 @@
                         </div>
                     </div>
 
+                    <div class="form-group">
+                        <label>Alamat Tempat Tinggal</label>
+                        <textarea class="form-control" name="alamat" rows="2" placeholder="Masukkan alamat lengkap tempat tinggal siswa...">{{ old('alamat') }}</textarea>
+                    </div>
+
                     <hr class="sidebar-divider">
                     <h5 class="text-info font-weight-bold">B. Data Akun Orang Tua / Wali</h5>
 

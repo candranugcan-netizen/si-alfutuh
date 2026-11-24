@@ -134,7 +134,7 @@
                                                id="email" 
                                                name="email" 
                                                value="{{ old('email') }}" 
-                                               placeholder="contoh: admin@alfutuh.sch.id" 
+                                               placeholder="Masukkan Email Terdaftar" 
                                                required 
                                                autofocus>
                                     </div>

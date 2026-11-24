@@ -52,6 +52,20 @@
     #eraporTab .show > .nav-link span {
         color: #ffffff !important;
     }
+    /* Checkbox Seleksi Cetak Indikator */
+    .indikator-checkbox, .kategori-checkbox {
+        width: 19px;
+        height: 19px;
+        cursor: pointer;
+        accent-color: #15803d;
+        vertical-align: middle;
+        margin: 0;
+    }
+    .col-cetak {
+        width: 65px;
+        text-align: center;
+        vertical-align: middle !important;
+    }
 </style>
 @endpush
 
@@ -105,8 +119,19 @@
     </div>
 
     @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
-            <i class="fas fa-check-circle mr-2"></i>{{ session('success') }}
+        <div class="alert alert-success alert-dismissible fade show shadow-sm border-left-success" role="alert" id="alertSuccessBanner">
+            <h5 class="alert-heading font-weight-bold mb-1"><i class="fas fa-check-circle mr-2"></i>Berhasil Disimpan!</h5>
+            <div>{{ session('success') }}</div>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show shadow-sm border-left-danger" role="alert" id="alertErrorBanner">
+            <h5 class="alert-heading font-weight-bold mb-1"><i class="fas fa-exclamation-triangle mr-2"></i>Gagal Menyimpan!</h5>
+            <div>{{ session('error') }}</div>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -114,7 +139,7 @@
     @endif
 
     @if(isset($errors) && $errors->any())
-        <div class="alert alert-danger shadow-sm">
+        <div class="alert alert-danger shadow-sm border-left-danger">
             <h6 class="font-weight-bold mb-1"><i class="fas fa-exclamation-triangle mr-2"></i>Terjadi kesalahan validasi:</h6>
             <ul class="mb-0 pl-3">
                 @foreach($errors->all() as $err)
@@ -125,9 +150,10 @@
     @endif
 
     <!-- Form Input e-Rapor -->
-    <form action="{{ route('erapor.update', $erapor->id) }}" method="POST" enctype="multipart/form-data" id="formErapor">
+    <form action="{{ route('erapor.update', $erapor->id) }}" method="POST" enctype="multipart/form-data" id="formErapor" novalidate>
         @csrf
         @method('PUT')
+        <input type="hidden" name="active_tab" id="activeTabInput" value="{{ request('tab', 'tab-identitas') }}">
 
         <div class="card shadow">
             <!-- Navigation Tabs -->
@@ -200,7 +226,12 @@
                                         <div class="form-group row">
                                             <label class="col-sm-4 col-form-label font-weight-bold">Alamat Peserta Didik</label>
                                             <div class="col-sm-8">
-                                                <textarea name="alamat" class="form-control" rows="2">{{ old('alamat', $erapor->alamat) }}</textarea>
+                                                <textarea name="alamat" class="form-control" rows="2" placeholder="Alamat siswa di rapor...">{{ old('alamat', (!empty($erapor->alamat) && $erapor->alamat !== 'Klepu RT 4 RW 4 Rejosari Semin Gunungkidul') ? $erapor->alamat : ($erapor->siswa->alamat ?: $erapor->alamat)) }}</textarea>
+                                                @if(!empty($erapor->siswa->alamat))
+                                                    <small class="text-muted"><i class="fas fa-check-circle text-success mr-1"></i>Otomatis diambil dari Data Siswa: <strong>{{ $erapor->siswa->alamat }}</strong></small>
+                                                @else
+                                                    <small class="text-muted"><i class="fas fa-info-circle text-info mr-1"></i>Alamat di Data Siswa belum diisi. Anda dapat mengisinya di Data Siswa atau langsung di sini.</small>
+                                                @endif
                                             </div>
                                         </div>
                                         <hr>
@@ -260,7 +291,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-5 col-form-label">Kepala RA</label>
                                             <div class="col-sm-7">
-                                                <input type="text" name="nama_kepala_sekolah" class="form-control" value="{{ old('nama_kepala_sekolah', $erapor->nama_kepala_sekolah ?? 'Pradita Ovi Agustina, S.Pd') }}" required>
+                                                <input type="text" name="nama_kepala_sekolah" class="form-control" value="{{ old('nama_kepala_sekolah', $erapor->nama_kepala_sekolah ?? 'Pradita Ovi Agustina, S.Pd') }}">
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -272,7 +303,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-5 col-form-label">Guru / Wali Kelas</label>
                                             <div class="col-sm-7">
-                                                <select name="nama_guru_kelas" id="selectGuruKelas" class="form-control" required>
+                                                <select name="nama_guru_kelas" id="selectGuruKelas" class="form-control">
                                                     <option value="">— Pilih Guru —</option>
                                                     @foreach($guruList as $guru)
                                                         <option value="{{ $guru->nama_guru }}" data-nik="{{ $guru->nik ?? '-' }}" {{ old('nama_guru_kelas', $erapor->nama_guru_kelas) == $guru->nama_guru ? 'selected' : '' }}>
@@ -356,6 +387,7 @@
 
                     <!-- TAB 2: INDIKATOR PERKEMBANGAN (CHECKLIST) -->
                     <div class="tab-pane fade" id="tab-indikator" role="tabpanel">
+                        <input type="hidden" name="indikator_selection_present" value="1">
 
                         <!-- Quick Action Toolbar -->
                         <div class="alert alert-info d-flex flex-wrap align-items-center justify-content-between p-3 mb-4 shadow-sm">
@@ -365,12 +397,15 @@
                                     <span class="badge badge-success ml-2">Kelas {{ $erapor->siswa->kelas->kelompok ?? $erapor->siswa->kelas->nama_kelas ?? 'A' }}</span>
                                 </h6>
                                 <p class="mb-0 small text-muted">
-                                    Skala: <strong>BB</strong> (Belum Berkembang), <strong>MB</strong> (Mulai Berkembang), <strong>BSH</strong> (Berkembang Sesuai Harapan), <strong>-</strong> (Belum Diberikan).
+                                    Centang kolom <strong>Cetak</strong> untuk memilih indikator yang akan dicetak di rapor. Skala: <strong>BB</strong>, <strong>MB</strong>, <strong>BSH</strong>, <strong>-</strong>.
                                 </p>
                             </div>
                             <div>
                                 <button type="button" class="btn btn-sm btn-primary shadow-sm mr-1 mb-1" data-toggle="modal" data-target="#modalTambahIndikator">
                                     <i class="fas fa-plus-circle mr-1"></i> Tambah Indikator Baru
+                                </button>
+                                <button type="button" class="btn btn-sm btn-primary shadow-sm mr-1 mb-1 font-weight-bold btn-trigger-save">
+                                    <i class="fas fa-save mr-1"></i> Simpan Perubahan
                                 </button>
                                 <button type="button" class="btn btn-sm btn-warning text-dark shadow-sm mr-1 mb-1" onclick="resetIndikatorStandar()">
                                     <i class="fas fa-sync-alt mr-1"></i> Reset ke Standar Kelas
@@ -378,20 +413,44 @@
                                 <button type="button" class="btn btn-sm btn-success shadow-sm mr-1 mb-1" onclick="setSemuaNilai('BSH')">
                                     <i class="fas fa-check-double mr-1"></i> Set Semua BSH
                                 </button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary mb-1" onclick="setSemuaNilai('-')">
-                                    <i class="fas fa-undo mr-1"></i> Reset (-)
+                                <button type="button" class="btn btn-sm btn-info shadow-sm mr-1 mb-1" onclick="setSemuaCetak(true)">
+                                    <i class="fas fa-check-square mr-1"></i> Centang Semua Cetak
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary mb-1" onclick="setSemuaCetak(false)">
+                                    <i class="far fa-square mr-1"></i> Hapus Semua Centang
                                 </button>
                             </div>
                         </div>
 
                         <!-- Render Grouped Indicators -->
                         @foreach($nilaiGrouped as $kategoriNama => $subKategoris)
+                            @php
+                                $kategoriSlug = 'cat_' . md5($kategoriNama);
+                            @endphp
                             <div class="card mb-4 border-left-success shadow-sm">
-                                <div class="card-header bg-success text-white py-2 d-flex justify-content-between align-items-center">
-                                    <h6 class="m-0 font-weight-bold">{{ $kategoriNama }}</h6>
-                                    <button type="button" class="btn btn-xs btn-light text-dark font-weight-bold" onclick="setNilaiKategori(this, 'BSH')">
-                                        Set Kategori Ini BSH
-                                    </button>
+                                <div class="card-header bg-success text-white py-2 d-flex flex-wrap justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center flex-wrap mb-1 mb-sm-0">
+                                        <h6 class="m-0 font-weight-bold mr-3">{{ $kategoriNama }}</h6>
+                                        <div class="d-inline-flex align-items-center bg-white text-dark py-1 px-2 rounded shadow-sm mr-2 my-1" style="font-size: 0.85rem;">
+                                            <input type="checkbox" class="kategori-checkbox mr-2" id="checkAll_{{ $kategoriSlug }}" onchange="pilihSemuaKategori('{{ $kategoriSlug }}', this.checked)">
+                                            <label class="m-0 font-weight-bold text-success" for="checkAll_{{ $kategoriSlug }}" style="cursor: pointer; user-select: none;">
+                                                Pilih Semua
+                                            </label>
+                                        </div>
+                                        <div class="btn-group btn-group-sm my-1 mr-2">
+                                            <button type="button" class="btn btn-xs btn-light text-success font-weight-bold" onclick="pilihSemuaKategori('{{ $kategoriSlug }}', true)" title="Centang semua indikator di kategori ini">
+                                                <i class="fas fa-check-square mr-1"></i> Centang Semua
+                                            </button>
+                                            <button type="button" class="btn btn-xs btn-outline-light font-weight-bold" onclick="pilihSemuaKategori('{{ $kategoriSlug }}', false)" title="Hilangkan centang semua indikator di kategori ini">
+                                                <i class="far fa-square mr-1"></i> Hapus Centang
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button type="button" class="btn btn-xs btn-light text-dark font-weight-bold" onclick="setNilaiKategori(this, 'BSH')">
+                                            Set Kategori Ini BSH
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="card-body p-0">
                                     @foreach($subKategoris as $subNama => $items)
@@ -404,6 +463,7 @@
                                             <table class="table table-sm table-hover mb-0 tabel-indikator">
                                                 <thead class="thead-light small text-center">
                                                     <tr>
+                                                        <th class="col-cetak" title="Centang untuk mencetak indikator ini ke lembar rapor">Cetak</th>
                                                         <th width="10%">Kode</th>
                                                         <th>Indikator Perkembangan</th>
                                                         <th width="28%">Penilaian (Semester {{ $erapor->semester }})</th>
@@ -413,6 +473,16 @@
                                                 <tbody class="small">
                                                     @foreach($items as $item)
                                                         <tr>
+                                                            <td class="col-cetak">
+                                                                <input type="checkbox" 
+                                                                       name="selected_indikator[]" 
+                                                                       value="{{ $item->id }}" 
+                                                                       class="indikator-checkbox check_{{ $kategoriSlug }}" 
+                                                                       id="check_item_{{ $item->id }}" 
+                                                                       data-kategori="{{ $kategoriSlug }}" 
+                                                                       {{ (!isset($item->is_selected) || $item->is_selected) ? 'checked' : '' }} 
+                                                                       title="Centang jika ingin dicetak di rapor">
+                                                            </td>
                                                             <td class="text-center font-weight-bold text-secondary">{{ $item->kode }}</td>
                                                             <td>{{ $item->indikator }}</td>
                                                             <td class="text-center">
@@ -680,7 +750,7 @@
                     <i class="fas fa-times mr-1"></i> Batal
                 </a>
 
-                <button type="submit" class="btn btn-success px-4 font-weight-bold shadow">
+                <button type="submit" id="btnSubmitErapor" class="btn btn-success px-4 font-weight-bold shadow">
                     <i class="fas fa-save mr-1"></i> Simpan Semua Perubahan
                 </button>
             </div>
@@ -717,7 +787,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label class="font-weight-bold small">Pilih Kategori Utama</label>
-                        <select name="kategori_kode" class="form-control" id="selectKategoriKode" required>
+                        <select name="kategori_kode" class="form-control" id="selectKategoriKode" onchange="updateSubKategoriVisibility()" required>
                             <option value="A">A. NILAI AGAMA DAN MORAL (NAM)</option>
                             <option value="B">B. FISIK MOTORIK</option>
                             <option value="C">C. KOGNITIF</option>
@@ -729,7 +799,7 @@
                     </div>
 
                     <div class="form-group" id="groupSubKategori">
-                        <label class="font-weight-bold small">Sub Kategori (Khusus Agama / Opsional)</label>
+                        <label class="font-weight-bold small">Sub Kategori (Khusus Nilai Agama & Moral)</label>
                         <select name="sub_kategori" class="form-control" id="selectSubKategori">
                             <option value="">-- Tanpa Sub Kategori --</option>
                             <option value="DAWAAMUL QUR’AN (DQ)" selected>DAWAAMUL QUR’AN (DQ)</option>
@@ -772,8 +842,28 @@
         </div>
     </div>
 </div>
+@endsection
 
+@push('scripts')
 <script>
+    // Fungsi untuk menampilkan atau menyembunyikan form Sub Kategori pada modal tambah indikator
+    function updateSubKategoriVisibility() {
+        var selectKategori = document.getElementById('selectKategoriKode');
+        var groupSubKat = document.getElementById('groupSubKategori');
+        var selectSubKat = document.getElementById('selectSubKategori');
+
+        if (!selectKategori || !groupSubKat) return;
+
+        if (selectKategori.value === 'A') {
+            groupSubKat.style.display = 'block';
+        } else {
+            groupSubKat.style.display = 'none';
+            if (selectSubKat) {
+                selectSubKat.value = '';
+            }
+        }
+    }
+
     // Fungsi untuk menghapus 1 butir indikator
     function hapusButirIndikator(id, nama) {
         if (confirm('Apakah Anda yakin ingin menghapus indikator:\n"' + nama + '"?')) {
@@ -826,8 +916,52 @@
         });
     }
 
-    // Auto-fill NIP Guru Kelas saat dropdown guru dipilih
+    // Fungsi untuk memilih atau membatalkan seluruh indikator dalam 1 kategori
+    function pilihSemuaKategori(kategoriSlug, isChecked) {
+        // Set checkbox header kategori
+        var header = document.getElementById('checkAll_' + kategoriSlug);
+        if (header) {
+            header.checked = isChecked;
+        }
+
+        // Set semua checkbox item di kategori ini
+        var items = document.querySelectorAll('.check_' + kategoriSlug);
+        items.forEach(function (el) {
+            el.checked = isChecked;
+        });
+    }
+
+    // Fungsi sinkronisasi status checkbox header per kategori
+    function syncAllHeaderCheckboxes() {
+        document.querySelectorAll('.kategori-checkbox').forEach(function (headerCheck) {
+            var kat = headerCheck.id.replace('checkAll_', '');
+            var allInCat = document.querySelectorAll('.check_' + kat);
+            var checkedInCat = document.querySelectorAll('.check_' + kat + ':checked');
+            headerCheck.checked = (allInCat.length > 0 && allInCat.length === checkedInCat.length);
+        });
+    }
+
+    // Fungsi global untuk memilih atau membatalkan seluruh centang indikator (Cetak)
+    function setSemuaCetak(isChecked) {
+        document.querySelectorAll('.kategori-checkbox').forEach(function (box) {
+            box.checked = isChecked;
+        });
+        document.querySelectorAll('.indikator-checkbox').forEach(function (box) {
+            box.checked = isChecked;
+        });
+    }
+
+    // Inisialisasi saat DOM / jQuery siap
     $(document).ready(function() {
+        // Inisialisasi tampilan modal sub-kategori
+        updateSubKategoriVisibility();
+
+        // Pastikan saat modal dibuka tampilan sub-kategori sesuai
+        $('#modalTambahIndikator').on('show.bs.modal', function () {
+            updateSubKategoriVisibility();
+        });
+
+        // Auto-fill NIP Guru Kelas saat dropdown guru dipilih
         var selectGuru = document.getElementById('selectGuruKelas');
         var inputNip = document.querySelector('input[name="nip_guru_kelas"]');
 
@@ -841,6 +975,62 @@
                 }
             });
         }
+
+        // Sinkronisasi status Check All per kategori saat item individual diubah
+        $(document).on('change', '.indikator-checkbox', function () {
+            var kat = $(this).data('kategori');
+            if (kat) {
+                var allInCat = $('.check_' + kat);
+                var checkedInCat = $('.check_' + kat + ':checked');
+                $('#checkAll_' + kat).prop('checked', allInCat.length > 0 && allInCat.length === checkedInCat.length);
+            }
+        });
+
+        // Inisialisasi awal status Check All per kategori
+        syncAllHeaderCheckboxes();
+
+        // Aktifkan tab berdasarkan URL query param 'tab' atau default
+        var urlParams = new URLSearchParams(window.location.search);
+        var requestedTab = urlParams.get('tab');
+        if (requestedTab) {
+            $('#eraporTab a[href="#' + requestedTab + '"]').tab('show');
+            $('#activeTabInput').val(requestedTab);
+        }
+
+        // Simpan tab aktif saat berpindah tab
+        $('a[data-toggle="pill"]').on('shown.bs.tab', function (e) {
+            var targetHref = $(e.target).attr("href");
+            if (targetHref) {
+                var tabId = targetHref.replace('#', '');
+                $('#activeTabInput').val(tabId);
+                if (window.history && window.history.replaceState) {
+                    var newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?tab=' + tabId;
+                    window.history.replaceState({path: newUrl}, '', newUrl);
+                }
+            }
+        });
+
+        // Tombol simpan cepat memicu form submit
+        $('.btn-trigger-save').on('click', function (e) {
+            e.preventDefault();
+            $('#formErapor').submit();
+        });
+
+        // Feedback loading saat form e-Rapor disubmit
+        $('#formErapor').on('submit', function () {
+            var btnSubmit = $('#btnSubmitErapor');
+            var btnQuick = $('.btn-trigger-save');
+
+            btnSubmit.prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-1"></i> Menyimpan Perubahan...');
+            btnQuick.prop('disabled', true).html('<i class="fas fa-spinner fa-spin mr-1"></i> Menyimpan...');
+        });
+
+        // Scroll halus ke banner alert jika ada notifikasi
+        if ($('#alertSuccessBanner, #alertErrorBanner').length > 0) {
+            $('html, body').animate({
+                scrollTop: $('#alertSuccessBanner, #alertErrorBanner').first().offset().top - 80
+            }, 300);
+        }
     });
 </script>
-@endsection
+@endpush

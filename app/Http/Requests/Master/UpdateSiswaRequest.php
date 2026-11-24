@@ -19,6 +19,7 @@ class UpdateSiswaRequest extends FormRequest
             'jenis_kelamin' => ['required', 'in:L,P'],
             'tempat_lahir' => ['nullable', 'string', 'max:50'],
             'tanggal_lahir' => ['nullable', 'date'],
+            'alamat' => ['nullable', 'string', 'max:500'],
             // Input data Orang Tua tambahan:
             'nama_wali' => ['required', 'string', 'max:100'],
             'email_ortu' => ['required', 'email', 'unique:users,email,' . $siswa->orangTua->user_id],

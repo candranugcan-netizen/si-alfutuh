@@ -92,10 +92,42 @@ class PpdbController extends Controller
 
     // --- 2. BAGIAN UNTUK ADMIN (DASHBOARD) ---
 
-    public function index()
+    public function index(Request $request)
     {
-        $pendaftar = PpdbPendaftaran::latest()->get();
-        return view('ppdb.index', compact('pendaftar'));
+        $query = PpdbPendaftaran::query();
+
+        // Filter berdasarkan status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Pencarian berdasarkan nama atau nomor pendaftaran
+        if ($request->filled('search')) {
+            $keyword = $request->search;
+            $query->where(function ($q) use ($keyword) {
+                $q->where('nama_lengkap', 'like', "%{$keyword}%")
+                  ->orWhere('no_pendaftaran', 'like', "%{$keyword}%")
+                  ->orWhere('nama_ayah', 'like', "%{$keyword}%")
+                  ->orWhere('email_ortu', 'like', "%{$keyword}%");
+            });
+        }
+
+        $pendaftar = $query->latest()->paginate(15)->withQueryString();
+
+        $stats = [
+            'total'    => PpdbPendaftaran::count(),
+            'pending'  => PpdbPendaftaran::where('status', 'Pending')->count(),
+            'diterima' => PpdbPendaftaran::where('status', 'Diterima')->count(),
+            'ditolak'  => PpdbPendaftaran::where('status', 'Ditolak')->count(),
+        ];
+
+        return view('ppdb.index', compact('pendaftar', 'stats'));
+    }
+
+    public function show($id)
+    {
+        $pendaftaran = PpdbPendaftaran::findOrFail($id);
+        return view('ppdb.show', compact('pendaftaran'));
     }
 
     public function terima($id)

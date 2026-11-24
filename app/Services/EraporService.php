@@ -74,6 +74,12 @@ class EraporService
 
             $erapor->status = 'Draft';
             $erapor->save();
+        } else {
+            // Jika e-rapor sudah ada namun alamat di e-rapor masih memakai default atau kosong, sinkronkan dengan alamat Data Siswa
+            if (!empty($siswa->alamat) && (empty($erapor->alamat) || $erapor->alamat === 'Klepu RT 4 RW 4 Rejosari Semin Gunungkidul')) {
+                $erapor->alamat = $siswa->alamat;
+                $erapor->save();
+            }
         }
 
         // Pastikan indikator default sudah terisi di tabel erapor_nilai
@@ -121,6 +127,7 @@ class EraporService
                     'kode' => $item['kode'],
                     'indikator' => $item['indikator'],
                     'nilai' => '-', // Default belum diisi
+                    'is_selected' => true,
                     'urutan' => $urutan++,
                     'created_at' => $now,
                     'updated_at' => $now,
@@ -180,6 +187,23 @@ class EraporService
                     EraporNilai::where('id', $nilaiId)
                         ->where('erapor_id', $erapor->id)
                         ->update(['nilai' => $cleanVal]);
+                }
+            }
+
+            // Update seleksi indikator yang akan dicetak di rapor
+            if (isset($data['indikator_selection_present'])) {
+                $selectedIds = isset($data['selected_indikator']) && is_array($data['selected_indikator'])
+                    ? array_map('intval', $data['selected_indikator'])
+                    : [];
+
+                // Set semua indikator rapor ini menjadi tidak terpilih terlebih dahulu
+                EraporNilai::where('erapor_id', $erapor->id)->update(['is_selected' => false]);
+
+                // Aktifkan indikator yang dicentang
+                if (!empty($selectedIds)) {
+                    EraporNilai::where('erapor_id', $erapor->id)
+                        ->whereIn('id', $selectedIds)
+                        ->update(['is_selected' => true]);
                 }
             }
 

@@ -20,7 +20,12 @@ class EraporNilai extends Model
         'kode',
         'indikator',
         'nilai',
+        'is_selected',
         'urutan',
+    ];
+
+    protected $casts = [
+        'is_selected' => 'boolean',
     ];
 
     public function erapor(): BelongsTo

@@ -87,74 +87,106 @@ class EraporController extends Controller
      */
     public function update(Request $request, Erapor $erapor)
     {
-        $validatedData = $request->validate([
-            'fase' => 'nullable|string|max:50',
-            'tanggal_rapor' => 'nullable|date',
-            'tempat_cetak' => 'nullable|string|max:100',
-            'nama_kepala_sekolah' => 'required|string|max:150',
-            'nip_kepala_sekolah' => 'nullable|string|max:50',
-            'nama_guru_kelas' => 'required|string|max:150',
-            'nip_guru_kelas' => 'nullable|string|max:50',
+        try {
+            $validatedData = $request->validate([
+                'fase' => 'nullable|string|max:50',
+                'tanggal_rapor' => 'nullable|date',
+                'tempat_cetak' => 'nullable|string|max:100',
+                'nama_kepala_sekolah' => 'nullable|string|max:150',
+                'nip_kepala_sekolah' => 'nullable|string|max:50',
+                'nama_guru_kelas' => 'nullable|string|max:150',
+                'nip_guru_kelas' => 'nullable|string|max:50',
 
-            // Biodata siswa di rapor
-            'agama' => 'nullable|string|max:30',
-            'anak_ke' => 'nullable|string|max:20',
-            'alamat' => 'nullable|string',
-            'nama_ayah' => 'nullable|string|max:100',
-            'agama_ayah' => 'nullable|string|max:30',
-            'nama_ibu' => 'nullable|string|max:100',
-            'agama_ibu' => 'nullable|string|max:30',
+                // Biodata siswa di rapor
+                'agama' => 'nullable|string|max:30',
+                'anak_ke' => 'nullable|string|max:20',
+                'alamat' => 'nullable|string',
+                'nama_ayah' => 'nullable|string|max:100',
+                'agama_ayah' => 'nullable|string|max:30',
+                'nama_ibu' => 'nullable|string|max:100',
+                'agama_ibu' => 'nullable|string|max:30',
 
-            // Fisik & Kesehatan
-            'status_gizi' => 'nullable|string',
-            'kondisi_rambut' => 'nullable|string',
-            'kondisi_mata' => 'nullable|string',
-            'kondisi_telinga' => 'nullable|string',
-            'kondisi_hidung' => 'nullable|string',
-            'kondisi_mulut' => 'nullable|string',
-            'kondisi_kulit' => 'nullable|string',
-            'kebersihan_badan' => 'nullable|string',
-            'kebersihan_pakaian' => 'nullable|string',
-            'berat_badan' => 'nullable|string',
-            'tinggi_badan' => 'nullable|string',
-            'lingkar_kepala' => 'nullable|string',
+                // Fisik & Kesehatan
+                'status_gizi' => 'nullable|string',
+                'kondisi_rambut' => 'nullable|string',
+                'kondisi_mata' => 'nullable|string',
+                'kondisi_telinga' => 'nullable|string',
+                'kondisi_hidung' => 'nullable|string',
+                'kondisi_mulut' => 'nullable|string',
+                'kondisi_kulit' => 'nullable|string',
+                'kebersihan_badan' => 'nullable|string',
+                'kebersihan_pakaian' => 'nullable|string',
+                'berat_badan' => 'nullable|string',
+                'tinggi_badan' => 'nullable|string',
+                'lingkar_kepala' => 'nullable|string',
 
-            // Kehadiran & Catatan
-            'kehadiran_sakit' => 'nullable|integer|min:0',
-            'kehadiran_izin' => 'nullable|integer|min:0',
-            'kehadiran_alfa' => 'nullable|integer|min:0',
-            'catatan_guru' => 'nullable|string',
-            'umpan_balik_ortu' => 'nullable|string',
+                // Kehadiran & Catatan
+                'kehadiran_sakit' => 'nullable|integer|min:0',
+                'kehadiran_izin' => 'nullable|integer|min:0',
+                'kehadiran_alfa' => 'nullable|integer|min:0',
+                'catatan_guru' => 'nullable|string',
+                'umpan_balik_ortu' => 'nullable|string',
 
-            // Laporan Perkembangan Foto Bukti
-            'narasi_agama' => 'nullable|string',
-            'foto_agama_1' => 'nullable|image|max:8192',
-            'foto_agama_2' => 'nullable|image|max:8192',
+                // Laporan Perkembangan Foto Bukti
+                'narasi_agama' => 'nullable|string',
+                'foto_agama_1' => 'nullable|image|max:8192',
+                'foto_agama_2' => 'nullable|image|max:8192',
 
-            'narasi_jati_diri' => 'nullable|string',
-            'foto_jati_diri_1' => 'nullable|image|max:8192',
-            'foto_jati_diri_2' => 'nullable|image|max:8192',
+                'narasi_jati_diri' => 'nullable|string',
+                'foto_jati_diri_1' => 'nullable|image|max:8192',
+                'foto_jati_diri_2' => 'nullable|image|max:8192',
 
-            'narasi_literasi_steam' => 'nullable|string',
-            'foto_literasi_steam_1' => 'nullable|image|max:8192',
-            'foto_literasi_steam_2' => 'nullable|image|max:8192',
+                'narasi_literasi_steam' => 'nullable|string',
+                'foto_literasi_steam_1' => 'nullable|image|max:8192',
+                'foto_literasi_steam_2' => 'nullable|image|max:8192',
 
-            'tema_projek' => 'nullable|string|max:255',
-            'narasi_projek' => 'nullable|string',
-            'foto_projek_1' => 'nullable|image|max:8192',
-            'foto_projek_2' => 'nullable|image|max:8192',
+                'tema_projek' => 'nullable|string|max:255',
+                'narasi_projek' => 'nullable|string',
+                'foto_projek_1' => 'nullable|image|max:8192',
+                'foto_projek_2' => 'nullable|image|max:8192',
 
-            'status' => 'required|in:Draft,Final',
-            'nilai' => 'nullable|array',
-        ]);
+                'status' => 'required|in:Draft,Final',
+                'nilai' => 'nullable|array',
+                'selected_indikator' => 'nullable|array',
+                'indikator_selection_present' => 'nullable',
+                'active_tab' => 'nullable|string',
+            ]);
 
-        $this->eraporService->updateErapor($erapor, $validatedData, $request->allFiles());
+            // Fallback nama kepala sekolah & guru kelas jika kosong
+            $validatedData['nama_kepala_sekolah'] = !empty($validatedData['nama_kepala_sekolah']) 
+                ? $validatedData['nama_kepala_sekolah'] 
+                : ($erapor->nama_kepala_sekolah ?: 'Pradita Ovi Agustina, S.Pd');
+                
+            $validatedData['nama_guru_kelas'] = !empty($validatedData['nama_guru_kelas']) 
+                ? $validatedData['nama_guru_kelas'] 
+                : ($erapor->nama_guru_kelas ?: 'Guru Kelas');
 
-        return redirect()->route('erapor.edit', [
-            'siswaId' => $erapor->siswa_id,
-            'tahun_ajaran_id' => $erapor->tahun_ajaran_id,
-            'semester' => $erapor->semester
-        ])->with('success', 'Data e-Rapor dan Laporan Perkembangan berhasil disimpan.');
+            // Fallback alamat: jika kosong di form e-rapor, ambil dari data master siswa
+            if (empty($validatedData['alamat']) && !empty($erapor->siswa->alamat)) {
+                $validatedData['alamat'] = $erapor->siswa->alamat;
+            }
+
+            $this->eraporService->updateErapor($erapor, $validatedData, $request->allFiles());
+
+            $activeTab = $request->input('active_tab', 'tab-identitas');
+
+            return redirect()->route('erapor.edit', [
+                'siswaId' => $erapor->siswa_id,
+                'tahun_ajaran_id' => $erapor->tahun_ajaran_id,
+                'semester' => $erapor->semester,
+                'tab' => $activeTab
+            ])->with('success', 'Berhasil! Seluruh perubahan data e-Rapor dan seleksi indikator telah tersimpan.');
+        } catch (\Illuminate\Validation\ValidationException $ve) {
+            return redirect()->back()
+                ->withErrors($ve->errors())
+                ->withInput()
+                ->with('error', 'Gagal menyimpan: Ada isian data yang belum valid. Silakan periksa kembali formulir.');
+        } catch (\Exception $e) {
+            \Log::error('Error saat menyimpan e-Rapor: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Gagal menyimpan perubahan: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -203,7 +235,13 @@ class EraporController extends Controller
      */
     public function cetakIndikator(Erapor $erapor, Request $request)
     {
-        $erapor->load(['siswa.kelas', 'tahunAjaran', 'nilai']);
+        $erapor->load([
+            'siswa.kelas', 
+            'tahunAjaran', 
+            'nilai' => function ($q) {
+                $q->where('is_selected', true)->orderBy('urutan');
+            }
+        ]);
 
         $logoPath = public_path('img/logo_ra.png');
         if (!file_exists($logoPath)) {
@@ -266,7 +304,13 @@ class EraporController extends Controller
      */
     public function cetakLengkap(Erapor $erapor, Request $request)
     {
-        $erapor->load(['siswa.kelas', 'tahunAjaran', 'nilai']);
+        $erapor->load([
+            'siswa.kelas', 
+            'tahunAjaran', 
+            'nilai' => function ($q) {
+                $q->where('is_selected', true)->orderBy('urutan');
+            }
+        ]);
 
         $logoPath = public_path('img/logo_ra.png');
         if (!file_exists($logoPath)) {
@@ -321,16 +365,19 @@ class EraporController extends Controller
         ];
 
         $kategoriNama = $mapKategori[$validated['kategori_kode']] ?? 'LAINNYA';
+        // Sub-kategori hanya berlaku untuk kategori A (Agama), selain itu dikosongkan
+        $subKategori = ($validated['kategori_kode'] === 'A' && !empty($validated['sub_kategori'])) ? $validated['sub_kategori'] : null;
         $maxUrutan = \App\Models\EraporNilai::where('erapor_id', $erapor->id)->max('urutan') ?? 0;
 
         \App\Models\EraporNilai::create([
             'erapor_id' => $erapor->id,
             'kategori_kode' => $validated['kategori_kode'],
             'kategori_nama' => $kategoriNama,
-            'sub_kategori' => !empty($validated['sub_kategori']) ? $validated['sub_kategori'] : null,
+            'sub_kategori' => $subKategori,
             'kode' => $validated['kode'],
             'indikator' => $validated['indikator'],
             'nilai' => $validated['nilai'],
+            'is_selected' => true,
             'urutan' => $maxUrutan + 1,
         ]);
 

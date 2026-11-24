@@ -87,7 +87,12 @@
                     <tr>
                         <td>{{ $siswas->firstItem() + $key }}</td>
                         <td>{{ $s->nis ?? '-' }}</td>
-                        <td>{{ $s->nama_siswa }}</td>
+                        <td>
+                            <strong>{{ $s->nama_siswa }}</strong>
+                            @if($s->alamat)
+                                <br><small class="text-muted"><i class="fas fa-map-marker-alt text-danger mr-1"></i>{{ Str::limit($s->alamat, 35) }}</small>
+                            @endif
+                        </td>
                         <td><span class="badge badge-info">{{ $s->jenis_kelamin }}</span></td>
 
                         <td>

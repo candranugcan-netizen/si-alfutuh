@@ -389,7 +389,7 @@
         <tr>
             <td>Alamat</td>
             <td>:</td>
-            <td>{{ $erapor->alamat ?? ($erapor->siswa->alamat ?? 'Klepu RT 4 RW 4 Rejosari Semin Gunungkidul') }}</td>
+            <td>{{ (!empty($erapor->alamat) && $erapor->alamat !== 'Klepu RT 4 RW 4 Rejosari Semin Gunungkidul') ? $erapor->alamat : ($erapor->siswa->alamat ?: ($erapor->alamat ?: 'Klepu RT 4 RW 4 Rejosari Semin Gunungkidul')) }}</td>
         </tr>
         <tr>
             <td colspan="3" style="padding-top: 15px; font-weight: bold; color: #1b4332;">Nama Orang Tua:</td>
@@ -455,7 +455,10 @@
     </table>
 
     @php
-        $groupedNilai = $erapor->nilai->groupBy(['kategori_nama', function ($item) {
+        $selectedNilai = $erapor->nilai->filter(function ($item) {
+            return $item->is_selected == 1 || $item->is_selected === true;
+        });
+        $groupedNilai = $selectedNilai->groupBy(['kategori_nama', function ($item) {
             return $item->sub_kategori ?? 'Umum';
         }]);
     @endphp
