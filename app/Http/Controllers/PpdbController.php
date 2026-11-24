@@ -176,6 +176,9 @@ class PpdbController extends Controller
 
             // Sesuaikan jalur lama dan baru
             $pathLama = Storage::disk('public')->path('uploads/ppdb/' . $namaFile);
+            if (!File::exists($pathLama) && File::exists(public_path('uploads/ppdb/' . $namaFile))) {
+                $pathLama = public_path('uploads/ppdb/' . $namaFile);
+            }
             $pathBaru = $folderTujuan . '/' . $namaFile;
 
             if (File::exists($pathLama)) {

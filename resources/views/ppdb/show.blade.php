@@ -32,16 +32,8 @@
         <div class="col-lg-4 mb-4">
             <div class="card shadow-sm border-0">
                 <div class="card-body text-center py-4">
-                    @php
-                        $fotoSiswaPath = storage_path('app/public/dokumen_siswa/' . $pendaftaran->file_foto);
-                        $fotoPpdbPath  = storage_path('app/public/uploads/ppdb/' . $pendaftaran->file_foto);
-                        $fotoUrl = file_exists($fotoSiswaPath)
-                            ? asset('storage/dokumen_siswa/' . $pendaftaran->file_foto)
-                            : (file_exists($fotoPpdbPath) ? asset('storage/uploads/ppdb/' . $pendaftaran->file_foto) : null);
-                    @endphp
-
-                    @if($fotoUrl)
-                        <img src="{{ $fotoUrl }}" alt="Foto Calon Siswa"
+                    @if($pendaftaran->foto_url)
+                        <img src="{{ $pendaftaran->foto_url }}" alt="Foto Calon Siswa"
                             class="rounded-circle shadow mb-3"
                             style="width: 120px; height: 120px; object-fit: cover; border: 4px solid #d1fae5;">
                     @else
@@ -109,33 +101,20 @@
                     <i class="fas fa-file-alt mr-2 text-info"></i> Berkas / Dokumen
                 </div>
                 <div class="card-body">
-                    @php
-                        function ppdbFileUrl($filename) {
-                            $siswaPath = storage_path('app/public/dokumen_siswa/' . $filename);
-                            $ppdbPath  = storage_path('app/public/uploads/ppdb/' . $filename);
-                            if (file_exists($siswaPath)) return asset('storage/dokumen_siswa/' . $filename);
-                            if (file_exists($ppdbPath))  return asset('storage/uploads/ppdb/' . $filename);
-                            return null;
-                        }
-                        $urlKK   = ppdbFileUrl($pendaftaran->file_kk);
-                        $urlAkta = ppdbFileUrl($pendaftaran->file_akta);
-                        $urlFoto = ppdbFileUrl($pendaftaran->file_foto);
-                    @endphp
-
-                    <a href="{{ $urlKK ?? '#' }}" target="_blank"
-                        class="btn btn-block btn-outline-primary mb-2 {{ $urlKK ? '' : 'disabled' }}">
+                    <a href="{{ $pendaftaran->kk_url ?? '#' }}" target="_blank"
+                        class="btn btn-block btn-outline-primary mb-2 {{ $pendaftaran->kk_url ? '' : 'disabled' }}">
                         <i class="fas fa-id-card mr-2"></i> Kartu Keluarga (KK)
-                        @if(!$urlKK) <small class="text-danger ml-1">(file tidak ditemukan)</small> @endif
+                        @if(!$pendaftaran->kk_url) <small class="text-danger ml-1">(tidak ada berkas)</small> @endif
                     </a>
-                    <a href="{{ $urlAkta ?? '#' }}" target="_blank"
-                        class="btn btn-block btn-outline-info mb-2 {{ $urlAkta ? '' : 'disabled' }}">
+                    <a href="{{ $pendaftaran->akta_url ?? '#' }}" target="_blank"
+                        class="btn btn-block btn-outline-info mb-2 {{ $pendaftaran->akta_url ? '' : 'disabled' }}">
                         <i class="fas fa-scroll mr-2"></i> Akta Kelahiran
-                        @if(!$urlAkta) <small class="text-danger ml-1">(file tidak ditemukan)</small> @endif
+                        @if(!$pendaftaran->akta_url) <small class="text-danger ml-1">(tidak ada berkas)</small> @endif
                     </a>
-                    <a href="{{ $urlFoto ?? '#' }}" target="_blank"
-                        class="btn btn-block btn-outline-success {{ $urlFoto ? '' : 'disabled' }}">
+                    <a href="{{ $pendaftaran->foto_url ?? '#' }}" target="_blank"
+                        class="btn btn-block btn-outline-success {{ $pendaftaran->foto_url ? '' : 'disabled' }}">
                         <i class="fas fa-image mr-2"></i> Foto Calon Siswa
-                        @if(!$urlFoto) <small class="text-danger ml-1">(file tidak ditemukan)</small> @endif
+                        @if(!$pendaftaran->foto_url) <small class="text-danger ml-1">(tidak ada berkas)</small> @endif
                     </a>
                 </div>
             </div>

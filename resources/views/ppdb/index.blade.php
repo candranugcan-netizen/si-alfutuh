@@ -167,17 +167,8 @@
                             {{-- Calon Siswa --}}
                             <td class="align-middle">
                                 <div class="d-flex align-items-center">
-                                    @php
-                                        $fotoUrl = null;
-                                        if ($item->file_foto) {
-                                            $p1 = storage_path('app/public/dokumen_siswa/' . $item->file_foto);
-                                            $p2 = storage_path('app/public/uploads/ppdb/' . $item->file_foto);
-                                            if (file_exists($p1)) $fotoUrl = asset('storage/dokumen_siswa/' . $item->file_foto);
-                                            elseif (file_exists($p2)) $fotoUrl = asset('storage/uploads/ppdb/' . $item->file_foto);
-                                        }
-                                    @endphp
-                                    @if($fotoUrl)
-                                        <img src="{{ $fotoUrl }}" alt="Foto"
+                                    @if($item->foto_url)
+                                        <img src="{{ $item->foto_url }}" alt="Foto"
                                             class="rounded-circle mr-3"
                                             style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #dee2e6; flex-shrink: 0;">
                                     @else
