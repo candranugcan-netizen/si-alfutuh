@@ -88,10 +88,31 @@
                         <td>{{ $siswas->firstItem() + $key }}</td>
                         <td>{{ $s->nis ?? '-' }}</td>
                         <td>
-                            <strong>{{ $s->nama_siswa }}</strong>
-                            @if($s->alamat)
-                                <br><small class="text-muted"><i class="fas fa-map-marker-alt text-danger mr-1"></i>{{ Str::limit($s->alamat, 35) }}</small>
-                            @endif
+                            <div class="d-flex align-items-center">
+                                @if($s->foto_url)
+                                    <a href="javascript:void(0)" class="btn-lihat-dokumen mr-2"
+                                        data-toggle="modal" data-target="#modalDokumenSiswa"
+                                        data-nama="{{ $s->nama_siswa }}"
+                                        data-info="NIS: {{ $s->nis ?? '-' }} &bull; Kelas: {{ $s->kelas->nama_kelas ?? '-' }}"
+                                        data-foto="{{ $s->foto_url }}"
+                                        data-foto-file="{{ $s->foto_anak }}"
+                                        data-kk="{{ $s->kk_url }}"
+                                        data-kk-file="{{ $s->kartu_keluarga }}"
+                                        data-akta="{{ $s->akta_url }}"
+                                        data-akta-file="{{ $s->akta_kelahiran }}"
+                                        data-active="foto"
+                                        title="Klik untuk melihat foto siswa">
+                                        <img src="{{ $s->foto_url }}" alt="Foto" class="rounded-circle shadow-sm"
+                                            style="width: 38px; height: 38px; object-fit: cover; border: 2px solid #36b9cc; cursor: pointer;">
+                                    </a>
+                                @endif
+                                <div>
+                                    <strong>{{ $s->nama_siswa }}</strong>
+                                    @if($s->alamat)
+                                        <br><small class="text-muted"><i class="fas fa-map-marker-alt text-danger mr-1"></i>{{ Str::limit($s->alamat, 35) }}</small>
+                                    @endif
+                                </div>
+                            </div>
                         </td>
                         <td><span class="badge badge-info">{{ $s->jenis_kelamin }}</span></td>
 
@@ -106,38 +127,43 @@
                         <td>{{ $s->orangTua->nama_wali ?? '-' }}</td>
                         <td>Rp {{ number_format($s->nominal_spp, 0, ',', '.') }}</td>
                         @can('create', App\Models\Siswa::class)
-                        <td>
-                            @if($s->foto_anak)
-                                <a href="{{ asset('storage/dokumen_siswa/' . $s->foto_anak) }}" target="_blank" class="btn btn-sm btn-info">
-                                    <i class="fas fa-image"></i> Lihat Foto
-                                </a>
-                            @else
-                                <span class="text-muted small">Tidak ada foto</span>
-                            @endif
-
-                            @if($s->akta_kelahiran)
-                                <a href="{{ asset('storage/dokumen_siswa/' . $s->akta_kelahiran) }}" target="_blank" class="btn btn-sm btn-secondary">
-                                    <i class="fas fa-file-alt"></i> Akta
-                                </a>
-                            @endif
-
-                            @if($s->kartu_keluarga)
-                                <a href="{{ asset('storage/dokumen_siswa/' . $s->kartu_keluarga) }}" target="_blank" class="btn btn-sm btn-secondary">
-                                    <i class="fas fa-file-invoice"></i> KK
-                                </a>
-                            @endif
-                            <a href="{{ route('siswa.edit', $s->id) }}" class="btn btn-sm btn-primary">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            @can('delete', $s)
-                            <form action="{{ route('siswa.destroy', $s->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus siswa ini?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger">
-                                    <i class="fas fa-trash"></i>
+                        <td class="text-center align-middle">
+                            <div class="d-flex align-items-center justify-content-center" style="gap: 5px;">
+                                @php
+                                    $countDocs = ($s->foto_anak ? 1 : 0) + ($s->akta_kelahiran ? 1 : 0) + ($s->kartu_keluarga ? 1 : 0);
+                                @endphp
+                                <button type="button"
+                                    class="btn btn-sm {{ $countDocs > 0 ? 'btn-outline-info' : 'btn-outline-secondary' }} btn-lihat-dokumen"
+                                    data-toggle="modal" data-target="#modalDokumenSiswa"
+                                    data-nama="{{ $s->nama_siswa }}"
+                                    data-info="NIS: {{ $s->nis ?? '-' }} &bull; Kelas: {{ $s->kelas->nama_kelas ?? '-' }} ({{ $s->kelas->kelompok ?? '-' }})"
+                                    data-foto="{{ $s->foto_url }}"
+                                    data-foto-file="{{ $s->foto_anak }}"
+                                    data-kk="{{ $s->kk_url }}"
+                                    data-kk-file="{{ $s->kartu_keluarga }}"
+                                    data-akta="{{ $s->akta_url }}"
+                                    data-akta-file="{{ $s->akta_kelahiran }}"
+                                    title="Lihat & Download Dokumen Siswa">
+                                    <i class="fas fa-folder-open mr-1"></i> Dokumen
+                                    @if($countDocs > 0)
+                                        <span class="badge badge-info ml-1">{{ $countDocs }}</span>
+                                    @endif
                                 </button>
-                            </form>
-                            @endcan
+
+                                <a href="{{ route('siswa.edit', $s->id) }}" class="btn btn-sm btn-primary" title="Edit Data Siswa">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+
+                                @can('delete', $s)
+                                <form action="{{ route('siswa.destroy', $s->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus siswa ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger" title="Hapus Siswa">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                                @endcan
+                            </div>
                         </td>
                         @endcan
                     </tr>

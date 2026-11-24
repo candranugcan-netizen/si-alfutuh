@@ -42,6 +42,39 @@ Route::get('/storage/{path}', function ($path) {
     return response()->file($filePath);
 })->where('path', '.*');
 
+// Route download dokumen siswa & PPDB (aman & memaksa download attachment)
+Route::get('/dokumen/download', function (\Illuminate\Http\Request $request) {
+    $file = basename($request->query('file'));
+    $kategori = $request->query('kategori', 'Dokumen');
+    $nama = $request->query('nama', 'Siswa');
+    $cleanNama = \Illuminate\Support\Str::slug($nama);
+
+    if (!$file) {
+        abort(404, 'Berkas tidak ditemukan.');
+    }
+
+    $ext = pathinfo($file, PATHINFO_EXTENSION);
+    $cleanKategori = \Illuminate\Support\Str::slug($kategori);
+    $downloadName = "{$cleanKategori}_{$cleanNama}.{$ext}";
+
+    $locations = [
+        storage_path('app/public/dokumen_siswa/' . $file),
+        public_path('storage/dokumen_siswa/' . $file),
+        public_path('dokumen_siswa/' . $file),
+        public_path('uploads/ppdb/' . $file),
+        storage_path('app/public/uploads/ppdb/' . $file),
+        public_path('storage/uploads/ppdb/' . $file),
+    ];
+
+    foreach ($locations as $loc) {
+        if (file_exists($loc) && is_file($loc)) {
+            return response()->download($loc, $downloadName);
+        }
+    }
+
+    abort(404, 'File fisik dokumen tidak ditemukan di server.');
+})->name('dokumen.download')->middleware('auth');
+
 
 Route::get('/rahasia-seed-role', function () {
     if (request('key') !== 'alfutuh123') { // Proteksi parameter rahasia

@@ -52,6 +52,7 @@
             });
         }
     </script>
+    @include('partials.modal-dokumen-siswa')
     @stack('scripts')
 </body>
 </html>

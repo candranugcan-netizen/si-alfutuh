@@ -215,16 +215,61 @@ class EraporController extends Controller
     }
 
     /**
-     * Helper untuk konversi gambar lokal ke base64 agar aman di DomPDF
+     * Dapatkan path fisik file foto e-Rapor dari berbagai kemungkinan lokasi disk
      */
-    public static function imageToBase64($path): ?string
+    public static function getFotoPath(?string $filename): ?string
     {
-        if (empty($path)) return null;
+        if (empty($filename)) return null;
 
-        if (file_exists($path)) {
-            $type = pathinfo($path, PATHINFO_EXTENSION);
-            $data = file_get_contents($path);
-            return 'data:image/' . ($type === 'svg' ? 'svg+xml' : $type) . ';base64,' . base64_encode($data);
+        $cleanFile = basename($filename);
+
+        $possiblePaths = [
+            Storage::disk('public')->path('erapor_foto/' . $cleanFile),
+            storage_path('app/public/erapor_foto/' . $cleanFile),
+            public_path('storage/erapor_foto/' . $cleanFile),
+            public_path('erapor_foto/' . $cleanFile),
+            storage_path('erapor_foto/' . $cleanFile),
+        ];
+
+        foreach ($possiblePaths as $p) {
+            if (file_exists($p) && is_file($p)) {
+                return $p;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Helper untuk konversi gambar lokal ke base64 agar aman dan tampil di DomPDF
+     */
+    public static function imageToBase64($pathOrFilename): ?string
+    {
+        if (empty($pathOrFilename)) return null;
+
+        $fullPath = null;
+        if (file_exists($pathOrFilename) && is_file($pathOrFilename)) {
+            $fullPath = $pathOrFilename;
+        } else {
+            $fullPath = self::getFotoPath(basename($pathOrFilename));
+        }
+
+        if ($fullPath && file_exists($fullPath)) {
+            $ext = strtolower(pathinfo($fullPath, PATHINFO_EXTENSION));
+            if ($ext === 'svg') {
+                $mime = 'image/svg+xml';
+            } elseif ($ext === 'webp') {
+                $mime = 'image/webp';
+            } elseif (in_array($ext, ['jpg', 'jpeg'])) {
+                $mime = 'image/jpeg';
+            } elseif ($ext === 'png') {
+                $mime = 'image/png';
+            } else {
+                $mime = 'image/' . $ext;
+            }
+
+            $data = file_get_contents($fullPath);
+            return 'data:' . $mime . ';base64,' . base64_encode($data);
         }
 
         return null;
@@ -277,14 +322,14 @@ class EraporController extends Controller
 
         // Persiapkan foto bukti perkembangan dalam bentuk base64 jika ada
         $fotoMap = [
-            'foto_agama_1' => self::imageToBase64(public_path('storage/erapor_foto/' . $erapor->foto_agama_1)),
-            'foto_agama_2' => self::imageToBase64(public_path('storage/erapor_foto/' . $erapor->foto_agama_2)),
-            'foto_jati_diri_1' => self::imageToBase64(public_path('storage/erapor_foto/' . $erapor->foto_jati_diri_1)),
-            'foto_jati_diri_2' => self::imageToBase64(public_path('storage/erapor_foto/' . $erapor->foto_jati_diri_2)),
-            'foto_literasi_steam_1' => self::imageToBase64(public_path('storage/erapor_foto/' . $erapor->foto_literasi_steam_1)),
-            'foto_literasi_steam_2' => self::imageToBase64(public_path('storage/erapor_foto/' . $erapor->foto_literasi_steam_2)),
-            'foto_projek_1' => self::imageToBase64(public_path('storage/erapor_foto/' . $erapor->foto_projek_1)),
-            'foto_projek_2' => self::imageToBase64(public_path('storage/erapor_foto/' . $erapor->foto_projek_2)),
+            'foto_agama_1' => self::imageToBase64($erapor->foto_agama_1),
+            'foto_agama_2' => self::imageToBase64($erapor->foto_agama_2),
+            'foto_jati_diri_1' => self::imageToBase64($erapor->foto_jati_diri_1),
+            'foto_jati_diri_2' => self::imageToBase64($erapor->foto_jati_diri_2),
+            'foto_literasi_steam_1' => self::imageToBase64($erapor->foto_literasi_steam_1),
+            'foto_literasi_steam_2' => self::imageToBase64($erapor->foto_literasi_steam_2),
+            'foto_projek_1' => self::imageToBase64($erapor->foto_projek_1),
+            'foto_projek_2' => self::imageToBase64($erapor->foto_projek_2),
         ];
 
         if ($request->has('preview')) {
@@ -319,14 +364,14 @@ class EraporController extends Controller
         $logoBase64 = self::imageToBase64($logoPath);
 
         $fotoMap = [
-            'foto_agama_1' => self::imageToBase64(public_path('storage/erapor_foto/' . $erapor->foto_agama_1)),
-            'foto_agama_2' => self::imageToBase64(public_path('storage/erapor_foto/' . $erapor->foto_agama_2)),
-            'foto_jati_diri_1' => self::imageToBase64(public_path('storage/erapor_foto/' . $erapor->foto_jati_diri_1)),
-            'foto_jati_diri_2' => self::imageToBase64(public_path('storage/erapor_foto/' . $erapor->foto_jati_diri_2)),
-            'foto_literasi_steam_1' => self::imageToBase64(public_path('storage/erapor_foto/' . $erapor->foto_literasi_steam_1)),
-            'foto_literasi_steam_2' => self::imageToBase64(public_path('storage/erapor_foto/' . $erapor->foto_literasi_steam_2)),
-            'foto_projek_1' => self::imageToBase64(public_path('storage/erapor_foto/' . $erapor->foto_projek_1)),
-            'foto_projek_2' => self::imageToBase64(public_path('storage/erapor_foto/' . $erapor->foto_projek_2)),
+            'foto_agama_1' => self::imageToBase64($erapor->foto_agama_1),
+            'foto_agama_2' => self::imageToBase64($erapor->foto_agama_2),
+            'foto_jati_diri_1' => self::imageToBase64($erapor->foto_jati_diri_1),
+            'foto_jati_diri_2' => self::imageToBase64($erapor->foto_jati_diri_2),
+            'foto_literasi_steam_1' => self::imageToBase64($erapor->foto_literasi_steam_1),
+            'foto_literasi_steam_2' => self::imageToBase64($erapor->foto_literasi_steam_2),
+            'foto_projek_1' => self::imageToBase64($erapor->foto_projek_1),
+            'foto_projek_2' => self::imageToBase64($erapor->foto_projek_2),
         ];
 
         if ($request->has('preview')) {

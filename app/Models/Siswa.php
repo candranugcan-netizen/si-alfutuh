@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 class Siswa extends Model
 {
@@ -70,5 +71,55 @@ public function orangTua(): BelongsTo
     public function absensi()
     {
         return $this->hasMany(Absensi::class, 'siswa_id')->latest();
+    }
+
+    /**
+     * Dapatkan URL file dokumen Siswa
+     */
+    public function getFileUrl($field)
+    {
+        $filename = $this->$field;
+        if (!$filename) {
+            return null;
+        }
+
+        // 1. Cek penyimpanan dokumen_siswa (storage disk public)
+        $diskPath = Storage::disk('public')->path('dokumen_siswa/' . $filename);
+        $publicStoragePath = public_path('storage/dokumen_siswa/' . $filename);
+        $storagePath = storage_path('dokumen_siswa/' . $filename);
+        $publicPath = public_path('dokumen_siswa/' . $filename);
+
+        if (file_exists($diskPath) || file_exists($publicStoragePath) || file_exists($storagePath) || file_exists($publicPath)) {
+            return asset('storage/dokumen_siswa/' . $filename);
+        }
+
+        // 2. Cek penyimpanan PPDB (jika file berasal dari PPDB yang masih di uploads/ppdb)
+        $ppdbDiskPath = Storage::disk('public')->path('uploads/ppdb/' . $filename);
+        $ppdbPublicStoragePath = public_path('storage/uploads/ppdb/' . $filename);
+        $ppdbPublicPath = public_path('uploads/ppdb/' . $filename);
+
+        if (file_exists($ppdbDiskPath) || file_exists($ppdbPublicStoragePath)) {
+            return asset('storage/uploads/ppdb/' . $filename);
+        }
+        if (file_exists($ppdbPublicPath)) {
+            return asset('uploads/ppdb/' . $filename);
+        }
+
+        return asset('storage/dokumen_siswa/' . $filename);
+    }
+
+    public function getFotoUrlAttribute()
+    {
+        return $this->getFileUrl('foto_anak');
+    }
+
+    public function getAktaUrlAttribute()
+    {
+        return $this->getFileUrl('akta_kelahiran');
+    }
+
+    public function getKkUrlAttribute()
+    {
+        return $this->getFileUrl('kartu_keluarga');
     }
 }

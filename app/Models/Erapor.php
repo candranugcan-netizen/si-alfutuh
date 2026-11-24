@@ -85,6 +85,33 @@ class Erapor extends Model
     }
 
     /**
+     * Dapatkan teks narasi dengan fallback otomatis ke narasi standar jika kosong
+     */
+    public function getNarasiAgamaDisplayAttribute(): string
+    {
+        $val = trim($this->narasi_agama ?? '');
+        return !empty($val) ? $val : "Pada semester ini, Ananda menunjukkan perkembangan yang baik pada nilai karakter Cinta Allah dan Rasul-Nya. Ananda menunjukkan perkembangan positif dalam menumbuhkan rasa cinta kepada Allah dan Rasul-Nya melalui ketaatan beribadah dan berdoa, seperti: menghafal surat-surat pendek (At-Takatsur, Al-Qori’ah), hadits sederhana, dan doa-doa harian. Anak dapat mengenal Asma’ul Husna sampai Al Qahar melalui lagu.\n\nKemajuan ini mencerminkan bahwa ananda mulai memahami pedoman hidup melalui Al-Qur'an dan Hadits secara sederhana sesuai tahap perkembangannya. Selain itu ananda menunjukkan kecerdasan dalam Bahasa Arab (khususnya mengenal angka 1-10) dan selalu mau membaca Iqro' dengan baik.\n\nDi semester berikutnya, dimohon bimbingan orang tua untuk meningkatkan hafalan surat pendek (seperti QS Al-Adiyat dan Az-Zalzalah) dengan murajaah rutin di rumah.";
+    }
+
+    public function getNarasiJatiDiriDisplayAttribute(): string
+    {
+        $val = trim($this->narasi_jati_diri ?? '');
+        return !empty($val) ? $val : "Ananda menunjukkan perkembangan yang baik dalam nilai karakter Cinta Diri Sendiri dan Sesama. Ananda terbiasa bertanggung jawab, hal ini terlihat ananda terbiasa menyelesaikan kegiatan yang diberikan hingga tuntas meskipun dengan tempo yang tenang, dan merapikan alat bermain atau alat belajar ke tempat semula setelah digunakan, misalnya setelah kegiatan kolase dan menggunting, ananda menaruh gunting dan lem ketempat semula.\n\nPerkembangan nilai karakter Cinta Diri Sendiri dan Sesama ananda berkembang baik. Ananda memiliki hati yang baik dan suka menolong teman-temannya yang sedang kesulitan. Dengan kecintaan dan kepedulian yang ananda tunjukkan, Ananda mencerminkan karakter yang baik Cinta Diri Sendiri dan Sesama.\n\nNamun ananda masih perlu terus dimotivasi dalam kedisiplinan waktu dan kemandirian dalam melakukan kegiatan secara konsisten.";
+    }
+
+    public function getNarasiLiterasiSteamDisplayAttribute(): string
+    {
+        $val = trim($this->narasi_literasi_steam ?? '');
+        return !empty($val) ? $val : "Alhamdulillah Ananda sudah menunjukkan perkembangan yang sangat baik dalam elemen Dasar-dasar Literasi, Matematika, Sains, Teknologi, Rekayasa, dan Seni yang tercermin melalui nilai karakter Cinta Ilmu. Ananda mampu mengenali bentuk gambar, simbol, maupun tanda. Hal ini ditunjukkan ananda dapat menyebutkan, menyusun dan mencontoh menulis huruf-huruf A sampai Z dengan baik.\n\nAnanda juga dapat membuat hasil karya dengan berbagai media dengan cukup kreatif. Hal ini ditunjukkan dengan ananda sudah dapat menggambar dan melukis dengan sangat indah dan membuat karya dengan bahan-bahan loose parts dengan sangat kreatif, seperti ananda membuat figura taman bunga.\n\nSemangat belajar ananda tampak kuat ketika diajak melakukan kegiatan observasi lingkungan. Pada pembelajaran tentang tanaman hias, ananda mengikuti kegiatan tadabur alam dengan penuh antusias, mengamati berbagai jenis tanaman di sekitar sekolah dan mampu menuliskannya.";
+    }
+
+    public function getNarasiProjekDisplayAttribute(): string
+    {
+        $val = trim($this->narasi_projek ?? '');
+        return !empty($val) ? $val : "Dalam kegiatan kokurikuler melalui Pembelajaran Berbasis Projek dengan tema \"Aku Cinta Indonesia\" dan \"Gigiku Sehat\", ananda menunjukkan perkembangan yang sangat baik.\n\nProjek \"Aku Cinta Indonesia\" dilaksanakan dalam tiga tahapan, yaitu tahap permulaan, pengembangan dan kesimpulan, yang seluruhnya bertujuan menumbuhkan karakter Cinta Tanah Air melalui pengenalan budaya batik Indonesia. Pada tahap pengembangan, ananda berpartisipasi aktif dalam kegiatan membatik berkolaborasi dengan bunda. Ananda terlihat fokus, teliti, dan menikmati pengalaman membatik.\n\nPada kegiatan projek \"Gigiku Sehat\", ananda antusias mempraktikkan sikat gigi mandiri dan bermain peran dokter gigi dengan penuh tanggung jawab, menguatkan rasa syukur atas nikmat kesehatan dari Allah SWT.";
+    }
+
+    /**
      * Daftar indikator perkembangan default sesuai format buku rapor RA Islam Al Futuh
      * Membedakan indikator hafalan Quran, Hadits, dan Doa untuk Kelas A dan Kelas B
      */

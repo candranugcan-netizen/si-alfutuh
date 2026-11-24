@@ -143,7 +143,7 @@
                             <th class="align-middle">Calon Siswa</th>
                             <th class="align-middle">Orang Tua</th>
                             <th class="text-center align-middle" style="width: 100px;">Status</th>
-                            <th class="text-center align-middle" style="width: 120px;">Aksi</th>
+                            <th class="text-center align-middle" style="width: 100px;">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -168,12 +168,25 @@
                             <td class="align-middle">
                                 <div class="d-flex align-items-center">
                                     @if($item->foto_url)
-                                        <img src="{{ $item->foto_url }}" alt="Foto"
-                                            class="rounded-circle mr-3"
-                                            style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #dee2e6; flex-shrink: 0;">
+                                        <a href="javascript:void(0)" class="btn-lihat-dokumen mr-3"
+                                            data-toggle="modal" data-target="#modalDokumenSiswa"
+                                            data-nama="{{ $item->nama_lengkap }}"
+                                            data-info="No. Pendaftaran: {{ $item->no_pendaftaran }} &bull; Status: {{ $item->status }}"
+                                            data-foto="{{ $item->foto_url }}"
+                                            data-foto-file="{{ $item->file_foto }}"
+                                            data-kk="{{ $item->kk_url }}"
+                                            data-kk-file="{{ $item->file_kk }}"
+                                            data-akta="{{ $item->akta_url }}"
+                                            data-akta-file="{{ $item->file_akta }}"
+                                            data-active="foto"
+                                            title="Klik untuk pratinjau dokumen">
+                                            <img src="{{ $item->foto_url }}" alt="Foto"
+                                                class="rounded-circle shadow-sm"
+                                                style="width: 42px; height: 42px; object-fit: cover; border: 2px solid #20c997; flex-shrink: 0; cursor: pointer;">
+                                        </a>
                                     @else
                                         <div class="rounded-circle mr-3 bg-light d-flex align-items-center justify-content-center"
-                                            style="width: 40px; height: 40px; border: 2px solid #dee2e6; flex-shrink: 0;">
+                                            style="width: 42px; height: 42px; border: 2px solid #dee2e6; flex-shrink: 0;">
                                             <i class="fas fa-user text-muted"></i>
                                         </div>
                                     @endif
@@ -220,33 +233,11 @@
                             {{-- Aksi --}}
                             <td class="text-center align-middle">
                                 <a href="{{ route('ppdb.show', $item->id) }}"
-                                    class="btn btn-sm btn-outline-info mb-1" title="Lihat Detail">
+                                    class="btn btn-sm btn-outline-primary px-3 font-weight-bold shadow-sm"
+                                    style="border-radius: 6px;"
+                                    title="Lihat Detail Pendaftar">
                                     <i class="fas fa-eye mr-1"></i> Detail
                                 </a>
-                                @if($item->status == 'Pending')
-                                    <div class="d-flex justify-content-center mt-1" style="gap: 4px;">
-                                        <form action="{{ route('ppdb.terima', $item->id) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            <button type="submit" class="btn btn-sm btn-success"
-                                                onclick="return confirm('Terima siswa ini? Data otomatis masuk ke master Siswa & User.')"
-                                                title="Terima">
-                                                <i class="fas fa-check"></i>
-                                            </button>
-                                        </form>
-                                        <form action="{{ route('ppdb.tolak', $item->id) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            <button type="submit" class="btn btn-sm btn-danger"
-                                                onclick="return confirm('Yakin ingin menolak pendaftar ini?')"
-                                                title="Tolak">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                @else
-                                    <div class="text-muted small mt-1">
-                                        <i class="fas fa-check-double mr-1"></i> Selesai
-                                    </div>
-                                @endif
                             </td>
                         </tr>
                         @empty

@@ -53,7 +53,28 @@
                             <tr>
                                 <td>{{ $key + 1 }}</td>
                                 <td>{{ $alumni->nis ?? '-' }}</td>
-                                <td class="font-weight-bold text-gray-800">{{ $alumni->nama_siswa }}</td>
+                                <td class="align-middle">
+                                    <div class="d-flex align-items-center">
+                                        @if($alumni->foto_url)
+                                            <a href="javascript:void(0)" class="btn-lihat-dokumen mr-2"
+                                                data-toggle="modal" data-target="#modalDokumenSiswa"
+                                                data-nama="{{ $alumni->nama_siswa }}"
+                                                data-info="NIS: {{ $alumni->nis ?? '-' }} &bull; Alumni Kelas: {{ $alumni->kelas->nama_kelas ?? '-' }}"
+                                                data-foto="{{ $alumni->foto_url }}"
+                                                data-foto-file="{{ $alumni->foto_anak }}"
+                                                data-kk="{{ $alumni->kk_url }}"
+                                                data-kk-file="{{ $alumni->kartu_keluarga }}"
+                                                data-akta="{{ $alumni->akta_url }}"
+                                                data-akta-file="{{ $alumni->akta_kelahiran }}"
+                                                data-active="foto"
+                                                title="Klik untuk melihat foto alumni">
+                                                <img src="{{ $alumni->foto_url }}" alt="Foto" class="rounded-circle shadow-sm"
+                                                    style="width: 36px; height: 36px; object-fit: cover; border: 2px solid #4e73df; cursor: pointer;">
+                                            </a>
+                                        @endif
+                                        <span class="font-weight-bold text-gray-800">{{ $alumni->nama_siswa }}</span>
+                                    </div>
+                                </td>
                                 <td>{{ $alumni->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
                                 <td>
                                     <span class="badge badge-secondary p-2">
@@ -72,26 +93,27 @@
                                     @endforeach
                                 </td>
 
-                                <td>
-                                    @if($alumni->foto_anak)
-                                        <a href="{{ asset('storage/dokumen_siswa/' . $alumni->foto_anak) }}" target="_blank" class="btn btn-sm btn-info mb-1">
-                                            <i class="fas fa-image"></i> Lihat Foto
-                                        </a>
-                                    @else
-                                        <span class="text-muted small d-block mb-1">Tidak ada dokumen</span>
-                                    @endif
-
-                                    @if($alumni->akta_kelahiran)
-                                        <a href="{{ asset('storage/dokumen_siswa/' . $alumni->akta_kelahiran) }}" target="_blank" class="btn btn-sm btn-secondary mb-1">
-                                            <i class="fas fa-file-alt"></i> Akta
-                                        </a>
-                                    @endif
-
-                                    @if($alumni->kartu_keluarga)
-                                        <a href="{{ asset('storage/dokumen_siswa/' . $alumni->kartu_keluarga) }}" target="_blank" class="btn btn-sm btn-secondary mb-1">
-                                            <i class="fas fa-file-invoice"></i> KK
-                                        </a>
-                                    @endif
+                                <td class="align-middle text-center">
+                                    @php
+                                        $countAlumniDocs = ($alumni->foto_anak ? 1 : 0) + ($alumni->akta_kelahiran ? 1 : 0) + ($alumni->kartu_keluarga ? 1 : 0);
+                                    @endphp
+                                    <button type="button"
+                                        class="btn btn-sm {{ $countAlumniDocs > 0 ? 'btn-outline-primary' : 'btn-outline-secondary' }} btn-lihat-dokumen"
+                                        data-toggle="modal" data-target="#modalDokumenSiswa"
+                                        data-nama="{{ $alumni->nama_siswa }}"
+                                        data-info="NIS: {{ $alumni->nis ?? '-' }} &bull; Alumni Kelas: {{ $alumni->kelas->nama_kelas ?? '-' }}"
+                                        data-foto="{{ $alumni->foto_url }}"
+                                        data-foto-file="{{ $alumni->foto_anak }}"
+                                        data-kk="{{ $alumni->kk_url }}"
+                                        data-kk-file="{{ $alumni->kartu_keluarga }}"
+                                        data-akta="{{ $alumni->akta_url }}"
+                                        data-akta-file="{{ $alumni->akta_kelahiran }}"
+                                        title="Lihat & Download Dokumen Alumni">
+                                        <i class="fas fa-folder-open mr-1"></i> Lihat Dokumen
+                                        @if($countAlumniDocs > 0)
+                                            <span class="badge badge-primary ml-1">{{ $countAlumniDocs }}</span>
+                                        @endif
+                                    </button>
                                 </td>
                             </tr>
                         @empty

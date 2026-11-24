@@ -211,7 +211,7 @@
             <tr>
                 <td class="element-text-col">
                     <span class="arabic-inline">ٱلْحَمْدُ لِلَّٰهِ رَبِّ ٱلْعَالَمِينَ</span>
-                    {!! nl2br(e($erapor->narasi_agama ?? 'Pada semester ini, Ananda menunjukkan perkembangan yang baik pada nilai karakter Cinta Allah dan Rasul-Nya. Ananda menunjukkan perkembangan positif dalam menumbuhkan rasa cinta kepada Allah dan Rasul-Nya melalui ketaatan beribadah dan berdoa, seperti: menghafal surat-surat pendek (At-Takatsur, Al-Qori’ah), hadits sederhana, dan doa-doa harian. Anak dapat mengenal Asma’ul Husna sampai Al Qahar melalui lagu.' . "\n\n" . 'Kemajuan ini mencerminkan bahwa ananda mulai memahami pedoman hidup melalui Al-Qur\'an dan Hadits secara sederhana sesuai tahap perkembangannya. Selain itu ananda menunjukkan kecerdasan dalam Bahasa Arab (khususnya mengenal angka 1-10) dan selalu mau membaca Iqro\' dengan baik.' . "\n\n" . 'Di semester berikutnya, dimohon bimbingan orang tua untuk meningkatkan hafalan surat pendek (seperti QS Al-Adiyat dan Az-Zalzalah) dengan murajaah rutin di rumah.')) !!}
+                    {!! nl2br(e($erapor->narasi_agama_display)) !!}
                 </td>
                 <td class="element-photo-col">
                     @if(!empty($fotoMap['foto_agama_1']))
@@ -234,7 +234,7 @@
         <table class="element-body-table">
             <tr>
                 <td class="element-text-col">
-                    {!! nl2br(e($erapor->narasi_jati_diri ?? 'Ananda menunjukkan perkembangan yang baik dalam nilai karakter Cinta Diri Sendiri dan Sesama. Ananda terbiasa bertanggung jawab, hal ini terlihat ananda terbiasa menyelesaikan kegiatan yang diberikan hingga tuntas meskipun dengan tempo yang tenang, dan merapikan alat bermain atau alat belajar ke tempat semula setelah digunakan, misalnya setelah kegiatan kolase dan menggunting, ananda menaruh gunting dan lem ketempat semula.' . "\n\n" . 'Perkembangan nilai karakter Cinta Diri Sendiri dan Sesama ananda berkembang baik. Ananda memiliki hati yang baik dan suka menolong teman-temannya yang sedang kesulitan. Dengan kecintaan dan kepedulian yang ananda tunjukkan, Ananda mencerminkan karakter yang baik Cinta Diri Sendiri dan Sesama.' . "\n\n" . 'Namun ananda masih perlu terus dimotivasi dalam kedisiplinan waktu dan kemandirian dalam melakukan kegiatan secara konsisten.')) !!}
+                    {!! nl2br(e($erapor->narasi_jati_diri_display)) !!}
                 </td>
                 <td class="element-photo-col">
                     @if(!empty($fotoMap['foto_jati_diri_1']))
@@ -259,7 +259,7 @@
         <table class="element-body-table">
             <tr>
                 <td class="element-text-col">
-                    {!! nl2br(e($erapor->narasi_literasi_steam ?? 'Alhamdulillah Ananda sudah menunjukkan perkembangan yang sangat baik dalam elemen Dasar-dasar Literasi, Matematika, Sains, Teknologi, Rekayasa, dan Seni yang tercermin melalui nilai karakter Cinta Ilmu. Ananda mampu mengenali bentuk gambar, simbol, maupun tanda. Hal ini ditunjukkan ananda dapat menyebutkan, menyusun dan mencontoh menulis huruf-huruf A sampai Z dengan baik.' . "\n\n" . 'Ananda juga dapat membuat hasil karya dengan berbagai media dengan cukup kreatif. Hal ini ditunjukkan dengan ananda sudah dapat menggambar dan melukis dengan sangat indah dan membuat karya dengan bahan-bahan loose parts dengan sangat kreatif, seperti ananda membuat figura taman bunga.' . "\n\n" . 'Semangat belajar ananda tampak kuat ketika diajak melakukan kegiatan observasi lingkungan. Pada pembelajaran tentang tanaman hias, ananda mengikuti kegiatan tadabur alam dengan penuh antusias, mengamati berbagai jenis tanaman di sekitar sekolah dan mampu menuliskannya.')) !!}
+                    {!! nl2br(e($erapor->narasi_literasi_steam_display)) !!}
                 </td>
                 <td class="element-photo-col">
                     @if(!empty($fotoMap['foto_literasi_steam_1']))
@@ -287,7 +287,7 @@
                             Tema: {{ $erapor->tema_projek }}
                         </div>
                     @endif
-                    {!! nl2br(e($erapor->narasi_projek ?? 'Dalam kegiatan kokurikuler melalui Pembelajaran Berbasis Projek dengan tema "Aku Cinta Indonesia" dan "Gigiku Sehat", ananda menunjukkan perkembangan yang sangat baik.' . "\n\n" . 'Projek "Aku Cinta Indonesia" dilaksanakan dalam tiga tahapan, yaitu tahap permulaan, pengembangan dan kesimpulan, yang seluruhnya bertujuan menumbuhkan karakter Cinta Tanah Air melalui pengenalan budaya batik Indonesia. Pada tahap pengembangan, ananda berpartisipasi aktif dalam kegiatan membatik berkolaborasi dengan bunda. Ananda terlihat fokus, teliti, dan menikmati pengalaman membatik.' . "\n\n" . 'Pada kegiatan projek "Gigiku Sehat", ananda antusias mempraktikkan sikat gigi mandiri dan bermain peran dokter gigi dengan penuh tanggung jawab, menguatkan rasa syukur atas nikmat kesehatan dari Allah SWT.')) !!}
+                    {!! nl2br(e($erapor->narasi_projek_display)) !!}
                 </td>
                 <td class="element-photo-col">
                     @if(!empty($fotoMap['foto_projek_1']))

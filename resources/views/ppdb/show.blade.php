@@ -33,9 +33,22 @@
             <div class="card shadow-sm border-0">
                 <div class="card-body text-center py-4">
                     @if($pendaftaran->foto_url)
-                        <img src="{{ $pendaftaran->foto_url }}" alt="Foto Calon Siswa"
-                            class="rounded-circle shadow mb-3"
-                            style="width: 120px; height: 120px; object-fit: cover; border: 4px solid #d1fae5;">
+                        <a href="javascript:void(0)" class="btn-lihat-dokumen d-inline-block"
+                            data-toggle="modal" data-target="#modalDokumenSiswa"
+                            data-nama="{{ $pendaftaran->nama_lengkap }}"
+                            data-info="No. Pendaftaran: {{ $pendaftaran->no_pendaftaran }}"
+                            data-foto="{{ $pendaftaran->foto_url }}"
+                            data-foto-file="{{ $pendaftaran->file_foto }}"
+                            data-kk="{{ $pendaftaran->kk_url }}"
+                            data-kk-file="{{ $pendaftaran->file_kk }}"
+                            data-akta="{{ $pendaftaran->akta_url }}"
+                            data-akta-file="{{ $pendaftaran->file_akta }}"
+                            data-active="foto"
+                            title="Klik untuk pratinjau foto/dokumen">
+                            <img src="{{ $pendaftaran->foto_url }}" alt="Foto Calon Siswa"
+                                class="rounded-circle shadow mb-3"
+                                style="width: 120px; height: 120px; object-fit: cover; border: 4px solid #d1fae5; cursor: pointer;">
+                        </a>
                     @else
                         <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto mb-3 shadow"
                             style="width: 120px; height: 120px; border: 4px solid #d1fae5;">
@@ -101,21 +114,65 @@
                     <i class="fas fa-file-alt mr-2 text-info"></i> Berkas / Dokumen
                 </div>
                 <div class="card-body">
-                    <a href="{{ $pendaftaran->kk_url ?? '#' }}" target="_blank"
-                        class="btn btn-block btn-outline-primary mb-2 {{ $pendaftaran->kk_url ? '' : 'disabled' }}">
-                        <i class="fas fa-id-card mr-2"></i> Kartu Keluarga (KK)
-                        @if(!$pendaftaran->kk_url) <small class="text-danger ml-1">(tidak ada berkas)</small> @endif
-                    </a>
-                    <a href="{{ $pendaftaran->akta_url ?? '#' }}" target="_blank"
-                        class="btn btn-block btn-outline-info mb-2 {{ $pendaftaran->akta_url ? '' : 'disabled' }}">
-                        <i class="fas fa-scroll mr-2"></i> Akta Kelahiran
-                        @if(!$pendaftaran->akta_url) <small class="text-danger ml-1">(tidak ada berkas)</small> @endif
-                    </a>
-                    <a href="{{ $pendaftaran->foto_url ?? '#' }}" target="_blank"
-                        class="btn btn-block btn-outline-success {{ $pendaftaran->foto_url ? '' : 'disabled' }}">
-                        <i class="fas fa-image mr-2"></i> Foto Calon Siswa
-                        @if(!$pendaftaran->foto_url) <small class="text-danger ml-1">(tidak ada berkas)</small> @endif
-                    </a>
+                    <button type="button"
+                        class="btn btn-block btn-outline-primary mb-2 btn-lihat-dokumen text-left d-flex justify-content-between align-items-center"
+                        data-toggle="modal" data-target="#modalDokumenSiswa"
+                        data-nama="{{ $pendaftaran->nama_lengkap }}"
+                        data-info="No. Pendaftaran: {{ $pendaftaran->no_pendaftaran }}"
+                        data-foto="{{ $pendaftaran->foto_url }}"
+                        data-foto-file="{{ $pendaftaran->file_foto }}"
+                        data-kk="{{ $pendaftaran->kk_url }}"
+                        data-kk-file="{{ $pendaftaran->file_kk }}"
+                        data-akta="{{ $pendaftaran->akta_url }}"
+                        data-akta-file="{{ $pendaftaran->file_akta }}"
+                        data-active="kk">
+                        <span><i class="fas fa-id-card mr-2"></i> Kartu Keluarga (KK)</span>
+                        @if($pendaftaran->kk_url)
+                            <span class="badge badge-success px-2 py-1"><i class="fas fa-eye mr-1"></i> Lihat</span>
+                        @else
+                            <span class="badge badge-secondary px-2 py-1">Kosong</span>
+                        @endif
+                    </button>
+
+                    <button type="button"
+                        class="btn btn-block btn-outline-info mb-2 btn-lihat-dokumen text-left d-flex justify-content-between align-items-center"
+                        data-toggle="modal" data-target="#modalDokumenSiswa"
+                        data-nama="{{ $pendaftaran->nama_lengkap }}"
+                        data-info="No. Pendaftaran: {{ $pendaftaran->no_pendaftaran }}"
+                        data-foto="{{ $pendaftaran->foto_url }}"
+                        data-foto-file="{{ $pendaftaran->file_foto }}"
+                        data-kk="{{ $pendaftaran->kk_url }}"
+                        data-kk-file="{{ $pendaftaran->file_kk }}"
+                        data-akta="{{ $pendaftaran->akta_url }}"
+                        data-akta-file="{{ $pendaftaran->file_akta }}"
+                        data-active="akta">
+                        <span><i class="fas fa-scroll mr-2"></i> Akta Kelahiran</span>
+                        @if($pendaftaran->akta_url)
+                            <span class="badge badge-info px-2 py-1"><i class="fas fa-eye mr-1"></i> Lihat</span>
+                        @else
+                            <span class="badge badge-secondary px-2 py-1">Kosong</span>
+                        @endif
+                    </button>
+
+                    <button type="button"
+                        class="btn btn-block btn-outline-success btn-lihat-dokumen text-left d-flex justify-content-between align-items-center"
+                        data-toggle="modal" data-target="#modalDokumenSiswa"
+                        data-nama="{{ $pendaftaran->nama_lengkap }}"
+                        data-info="No. Pendaftaran: {{ $pendaftaran->no_pendaftaran }}"
+                        data-foto="{{ $pendaftaran->foto_url }}"
+                        data-foto-file="{{ $pendaftaran->file_foto }}"
+                        data-kk="{{ $pendaftaran->kk_url }}"
+                        data-kk-file="{{ $pendaftaran->file_kk }}"
+                        data-akta="{{ $pendaftaran->akta_url }}"
+                        data-akta-file="{{ $pendaftaran->file_akta }}"
+                        data-active="foto">
+                        <span><i class="fas fa-image mr-2"></i> Foto Calon Siswa</span>
+                        @if($pendaftaran->foto_url)
+                            <span class="badge badge-success px-2 py-1"><i class="fas fa-eye mr-1"></i> Lihat</span>
+                        @else
+                            <span class="badge badge-secondary px-2 py-1">Kosong</span>
+                        @endif
+                    </button>
                 </div>
             </div>
         </div>

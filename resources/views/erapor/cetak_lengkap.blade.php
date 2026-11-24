@@ -517,7 +517,7 @@
             <tr>
                 <td class="element-text-col">
                     <span style="font-size: 12px; color: #0b3d20; font-weight: bold;">ٱلْحَمْدُ لِلَّٰهِ رَبِّ ٱلْعَالَمِينَ</span>
-                    {!! nl2br(e($erapor->narasi_agama ?? 'Pada semester ini, Ananda menunjukkan perkembangan yang baik pada nilai karakter Cinta Allah dan Rasul-Nya. Ananda menunjukkan perkembangan positif dalam ketaatan beribadah dan berdoa, menghafal surat pendek, hadits sederhana, dan doa-doa harian. Mengikuti kegiatan pembiasaan berwudhu dan sholat dengan antusias.')) !!}
+                    {!! nl2br(e($erapor->narasi_agama_display)) !!}
                 </td>
                 <td class="element-photo-col">
                     @if(!empty($fotoMap['foto_agama_1']))

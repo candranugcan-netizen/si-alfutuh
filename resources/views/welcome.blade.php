@@ -1397,7 +1397,7 @@
                         </div>
                         <div>
                             <i class="bi-envelope text-warning me-2"></i>
-                            <span>info@ra-alfutuh.sch.id</span>
+                            <span>admin@sekolahislamalfutuh.com</span>
                         </div>
                         <div>
                             <i class="bi-telephone text-warning me-2"></i>
