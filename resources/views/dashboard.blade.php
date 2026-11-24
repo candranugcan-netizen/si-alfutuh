@@ -99,22 +99,47 @@
         </div>
 
 
-        <!-- Donut Chart: Status SPP Bulan Ini -->
-        <div class="col-xl-4 col-lg-5 mb-4">
+        <!-- Donut Chart: Status SPP -->
+        <div class="col-xl-4 col-lg-5 mb-4" id="card-spp">
             <div class="card shadow h-100" style="border-radius: 10px;">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-white" style="border-radius: 10px 10px 0 0;">
-                    <h6 class="m-0 font-weight-bold text-success">SPP Bulan Ini ({{ \Carbon\Carbon::now()->translatedFormat('F Y') }})</h6>
+                <div class="card-header py-3 bg-white" style="border-radius: 10px 10px 0 0;">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <h6 class="m-0 font-weight-bold text-success">
+                            <i class="fas fa-wallet mr-1"></i> SPP: {{ $periodeBulanIni }}
+                        </h6>
+                    </div>
+                    {{-- Filter Cepat Bulan/Tahun SPP --}}
+                    <form method="GET" action="{{ route('dashboard') }}#card-spp" class="form-row align-items-center">
+                        <div class="col-6">
+                            <select name="bulan" class="form-control form-control-sm" onchange="this.form.submit()">
+                                @foreach($daftarBulanIndo as $num => $namaBln)
+                                    <option value="{{ $num }}" {{ $num == $bulanDipilih ? 'selected' : '' }}>
+                                        {{ $namaBln }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <select name="tahun" class="form-control form-control-sm" onchange="this.form.submit()">
+                                @foreach($daftarTahunPilihan as $thn)
+                                    <option value="{{ $thn }}" {{ $thn == $tahunDipilih ? 'selected' : '' }}>
+                                        {{ $thn }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </form>
                 </div>
                 <div class="card-body">
-                    <div class="chart-pie pt-4 pb-2" style="height: 240px;">
+                    <div class="chart-pie pt-2 pb-2" style="height: 220px;">
                         <canvas id="pieSpp"></canvas>
                     </div>
-                    <div class="mt-4 text-center small">
+                    <div class="mt-3 text-center small">
                         <span class="mr-2">
-                            <i class="fas fa-circle text-success"></i> Sudah Bayar ({{ $siswaSudahBayarSpp }})
+                            <i class="fas fa-circle text-success"></i> Sudah Lunas ({{ $siswaSudahBayarSpp }})
                         </span>
                         <span class="mr-2">
-                            <i class="fas fa-circle text-warning"></i> Belum ({{ $siswaBelumBayarSpp }})
+                            <i class="fas fa-circle text-warning"></i> Belum Lunas ({{ $siswaBelumBayarSpp }})
                         </span>
                     </div>
                 </div>

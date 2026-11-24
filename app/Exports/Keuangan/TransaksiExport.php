@@ -53,6 +53,7 @@ class TransaksiExport implements FromQuery, WithHeadings, WithMapping, WithStyle
             $query->where(function($q) use ($keyword) {
                 $q->where('no_transaksi', 'like', "%{$keyword}%")
                   ->orWhere('keterangan', 'like', "%{$keyword}%")
+                  ->orWhere('untuk_bulan', 'like', "%{$keyword}%")
                   ->orWhereHas('siswa', function($sq) use ($keyword) {
                       $sq->where('nama_siswa', 'like', "%{$keyword}%");
                   });
