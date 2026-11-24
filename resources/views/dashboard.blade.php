@@ -7,7 +7,14 @@
 
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800 font-weight-bold">Dashboard Statistik</h1>
+        <div class="d-flex align-items-center flex-wrap">
+            <h1 class="h3 mb-0 text-gray-800 font-weight-bold mr-3">Dashboard Statistik</h1>
+            @hasanyrole('Super Admin|Admin')
+            <button type="button" class="btn btn-sm btn-outline-success font-weight-bold shadow-sm" data-toggle="modal" data-target="#modalUpdateAplikasi">
+                <i class="fas fa-bullhorn mr-1"></i> Info Pembaruan
+            </button>
+            @endhasanyrole
+        </div>
         <span class="text-muted small">Tahun Ajaran Aktif: {{ date('Y') }}/{{ date('Y')+1 }}</span>
     </div>
 
@@ -169,6 +176,219 @@
 
         </div>
     </div>
+
+    {{-- Modal Pop-up Update Pembaharuan Aplikasi (Khusus Admin) --}}
+    @hasanyrole('Super Admin|Admin')
+    <div class="modal fade" id="modalUpdateAplikasi" tabindex="-1" role="dialog" aria-labelledby="modalUpdateTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content border-0 shadow" style="border-radius: 16px; overflow: hidden;">
+                {{-- Header Modal --}}
+                <div class="modal-header bg-white px-4 py-3 border-bottom d-flex align-items-center justify-content-between" style="border-color: #f1f5f9 !important;">
+                    <div class="d-flex align-items-center">
+                        <div class="d-flex align-items-center justify-content-center mr-3 shadow-sm"
+                            style="width: 44px; height: 44px; min-width: 44px; border-radius: 12px; background: #ecfdf5; color: #059669;">
+                            <i class="fas fa-bullhorn fa-lg"></i>
+                        </div>
+                        <div>
+                            <div class="d-flex align-items-center flex-wrap">
+                                <h5 class="modal-title font-weight-bold text-gray-900 mb-0" id="modalUpdateTitle">
+                                    Update Sistem Informasi RA Al Futuh
+                                </h5>
+                                <span class="badge badge-pill ml-2 px-2 py-1" style="background: #e6f4ea; color: #137333; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.3px;">
+                                    TERBARU
+                                </span>
+                            </div>
+                            <small class="text-muted">Ringkasan fitur baru dan penyempurnaan sistem</small>
+                        </div>
+                    </div>
+                    <button type="button" class="close text-muted" data-dismiss="modal" aria-label="Close" style="font-size: 1.5rem; outline: none; opacity: 0.6;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                {{-- Body Modal --}}
+                <div class="modal-body px-4 py-3" style="background-color: #f8fafc; max-height: 68vh; overflow-y: auto;">
+                    <div class="row">
+                        {{-- 1. E-Rapor --}}
+                        <div class="col-12 mb-2">
+                            <div class="card border-0 shadow-sm" style="border-radius: 10px; background: #ffffff; border-left: 3px solid #10b981 !important;">
+                                <div class="card-body p-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge badge-light text-success font-weight-bold mr-2 px-2 py-1" style="background: #ecfdf5; font-size: 0.8rem;">
+                                                01
+                                            </span>
+                                            <h6 class="font-weight-bold text-gray-900 mb-0">Fitur E-Rapor</h6>
+                                        </div>
+                                        <span class="badge badge-pill px-2 py-1" style="background: #e0f2fe; color: #0284c7; font-size: 0.72rem; font-weight: 600;">
+                                            Fitur Baru
+                                        </span>
+                                    </div>
+                                    <p class="text-muted small mb-0 pl-1" style="line-height: 1.5;">
+                                        Fitur terbaru dari website, digunakan untuk input laporan perkembangan murid dengan mudah dan efisien.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- 2. Bayar SPP --}}
+                        <div class="col-12 mb-2">
+                            <div class="card border-0 shadow-sm" style="border-radius: 10px; background: #ffffff; border-left: 3px solid #3b82f6 !important;">
+                                <div class="card-body p-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge badge-light text-primary font-weight-bold mr-2 px-2 py-1" style="background: #eff6ff; font-size: 0.8rem;">
+                                                02
+                                            </span>
+                                            <h6 class="font-weight-bold text-gray-900 mb-0">Fitur Bayar SPP</h6>
+                                        </div>
+                                        <span class="badge badge-pill px-2 py-1" style="background: #eff6ff; color: #2563eb; font-size: 0.72rem; font-weight: 600;">
+                                            Peningkatan
+                                        </span>
+                                    </div>
+                                    <p class="text-muted small mb-0 pl-1" style="line-height: 1.5;">
+                                        Saat ini memungkinkan untuk melakukan input pembayaran hingga 5 tahun ke depan dengan proteksi anti duplikasi.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- 3. SPMB (PPDB) --}}
+                        <div class="col-12 mb-2">
+                            <div class="card border-0 shadow-sm" style="border-radius: 10px; background: #ffffff; border-left: 3px solid #6366f1 !important;">
+                                <div class="card-body p-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge badge-light font-weight-bold mr-2 px-2 py-1" style="background: #eef2ff; color: #4f46e5; font-size: 0.8rem;">
+                                                03
+                                            </span>
+                                            <h6 class="font-weight-bold text-gray-900 mb-0">Fitur SPMB (PPDB)</h6>
+                                        </div>
+                                        <span class="badge badge-pill px-2 py-1" style="background: #eef2ff; color: #4f46e5; font-size: 0.72rem; font-weight: 600;">
+                                            Data & Berkas
+                                        </span>
+                                    </div>
+                                    <p class="text-muted small mb-0 pl-1" style="line-height: 1.5;">
+                                        Fitur lihat detail data siswa lengkap beserta peninjauan dokumen berkas pendaftaran siswa.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- 4. Komite --}}
+                        <div class="col-12 mb-2">
+                            <div class="card border-0 shadow-sm" style="border-radius: 10px; background: #ffffff; border-left: 3px solid #0d9488 !important;">
+                                <div class="card-body p-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge badge-light font-weight-bold mr-2 px-2 py-1" style="background: #f0fdfa; color: #0d9488; font-size: 0.8rem;">
+                                                04
+                                            </span>
+                                            <h6 class="font-weight-bold text-gray-900 mb-0">Fitur Komite</h6>
+                                        </div>
+                                        <span class="badge badge-pill px-2 py-1" style="background: #f0fdfa; color: #0f766e; font-size: 0.72rem; font-weight: 600;">
+                                            Upload Nota
+                                        </span>
+                                    </div>
+                                    <p class="text-muted small mb-0 pl-1" style="line-height: 1.5;">
+                                        Memungkinkan komite untuk mengunggah bukti atau nota transaksi secara langsung ke sistem.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- 5. Data Siswa --}}
+                        <div class="col-12 mb-2">
+                            <div class="card border-0 shadow-sm" style="border-radius: 10px; background: #ffffff; border-left: 3px solid #64748b !important;">
+                                <div class="card-body p-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge badge-light font-weight-bold mr-2 px-2 py-1" style="background: #f8fafc; color: #475569; font-size: 0.8rem;">
+                                                05
+                                            </span>
+                                            <h6 class="font-weight-bold text-gray-900 mb-0">Fitur Data Siswa</h6>
+                                        </div>
+                                        <span class="badge badge-pill px-2 py-1" style="background: #f1f5f9; color: #475569; font-size: 0.72rem; font-weight: 600;">
+                                            Kolom Baru
+                                        </span>
+                                    </div>
+                                    <p class="text-muted small mb-0 pl-1" style="line-height: 1.5;">
+                                        Penambahan kolom alamat lengkap pada data induk siswa untuk kelengkapan administrasi.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- 6. Sinkronisasi Data Siswa (Perhatian) --}}
+                        <div class="col-12 mb-2">
+                            <div class="card border-0 shadow-sm" style="border-radius: 10px; background: #fffbeb; border: 1px solid #fef3c7; border-left: 3px solid #f59e0b !important;">
+                                <div class="card-body p-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge badge-light font-weight-bold mr-2 px-2 py-1" style="background: #fef3c7; color: #b45309; font-size: 0.8rem;">
+                                                06
+                                            </span>
+                                            <h6 class="font-weight-bold text-gray-900 mb-0">Sinkronisasi Data Siswa</h6>
+                                        </div>
+                                        <span class="badge badge-pill px-2 py-1" style="background: #fef3c7; color: #b45309; font-size: 0.72rem; font-weight: 600;">
+                                            <i class="fas fa-exclamation-triangle mr-1"></i> Penting
+                                        </span>
+                                    </div>
+                                    <p class="small mb-0 pl-1" style="line-height: 1.5; color: #92400e;">
+                                        Data siswa harus segera diperbarui dan dirapikan karena tersinkron langsung dengan sistem E-Rapor.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- 7. Tampilan Baru --}}
+                        <div class="col-12 mb-1">
+                            <div class="card border-0 shadow-sm" style="border-radius: 10px; background: #ffffff; border-left: 3px solid #06b6d4 !important;">
+                                <div class="card-body p-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <div class="d-flex align-items-center">
+                                            <span class="badge badge-light font-weight-bold mr-2 px-2 py-1" style="background: #ecfeff; color: #0891b2; font-size: 0.8rem;">
+                                                07
+                                            </span>
+                                            <h6 class="font-weight-bold text-gray-900 mb-0">Tampilan Antarmuka Baru</h6>
+                                        </div>
+                                        <span class="badge badge-pill px-2 py-1" style="background: #ecfeff; color: #0e7490; font-size: 0.72rem; font-weight: 600;">
+                                            UI Refresh
+                                        </span>
+                                    </div>
+                                    <p class="text-muted small mb-0 pl-1" style="line-height: 1.5;">
+                                        Penyegaran tampilan visual yang lebih bersih dan modern pada halaman awal serta halaman login.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Pesan Penutup --}}
+                    <div class="text-center py-2 px-3 mt-3 rounded" style="background: #ffffff; border: 1px dashed #cbd5e1;">
+                        <span class="text-muted small" style="font-size: 0.85rem; font-style: italic;">
+                            <i class="fas fa-heart text-danger mr-1"></i>
+                            Dibuat dengan Cinta biidznillahi taala .. Semoga bermanfaat. aamiin
+                        </span>
+                    </div>
+                </div>
+
+                {{-- Footer Modal --}}
+                <div class="modal-footer bg-white px-4 py-3 d-flex justify-content-between align-items-center border-top" style="border-color: #f1f5f9 !important;">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="chkJanganTampilkan">
+                        <label class="custom-control-label small text-muted font-weight-bold" for="chkJanganTampilkan" style="cursor: pointer;">
+                            Jangan tampilkan lagi
+                        </label>
+                    </div>
+                    <button type="button" class="btn btn-success px-4 py-2 font-weight-bold shadow-sm" data-dismiss="modal" id="btnTutupUpdate" style="border-radius: 8px;">
+                        <i class="fas fa-check mr-1"></i> Saya Mengerti
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endhasanyrole
 </div>
 @endsection
 
@@ -292,4 +512,30 @@
         },
     });
 </script>
+
+@hasanyrole('Super Admin|Admin')
+<script>
+    $(document).ready(function() {
+        // Tampilkan modal secara otomatis jika admin belum memilih "Jangan tampilkan lagi"
+        if (!localStorage.getItem('alfutuh_update_seen_nov2026')) {
+            $('#modalUpdateAplikasi').modal('show');
+        }
+
+        // Simpan preferensi jika checkbox dicentang
+        $('#btnTutupUpdate').on('click', function() {
+            if ($('#chkJanganTampilkan').is(':checked')) {
+                localStorage.setItem('alfutuh_update_seen_nov2026', 'true');
+            }
+        });
+
+        $('#chkJanganTampilkan').on('change', function() {
+            if ($(this).is(':checked')) {
+                localStorage.setItem('alfutuh_update_seen_nov2026', 'true');
+            } else {
+                localStorage.removeItem('alfutuh_update_seen_nov2026');
+            }
+        });
+    });
+</script>
+@endhasanyrole
 @endpush
